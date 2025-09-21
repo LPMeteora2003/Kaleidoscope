@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Kaleidoscope.Core.Abstractions\Kaleidoscope.Core.Abstractions.csproj" />
+    <ProjectReference Include="..\Kaleidoscope.Core.Async.Abstractions\Kaleidoscope.Core.Async.Abstractions.csproj" />
+    <ProjectReference Include="..\Kaleidoscope.Core.Async\Kaleidoscope.Core.Async.csproj" />
+    <ProjectReference Include="..\Kaleidoscope.Core\Kaleidoscope.Core.csproj" />
+    <ProjectReference Include="..\Kaleidoscope.Logic.Beaver.Abstractions\Kaleidoscope.Logic.Beaver.Abstractions.csproj" />
+    <ProjectReference Include="..\Kaleidoscope.Logic.Core.Abstractions\Kaleidoscope.Logic.Core.Abstractions.csproj" />
+    <ProjectReference Include="..\Kaleidoscope.Logic.Core\Kaleidoscope.Logic.Core.csproj" />
+  </ItemGroup>
+
+</Project>

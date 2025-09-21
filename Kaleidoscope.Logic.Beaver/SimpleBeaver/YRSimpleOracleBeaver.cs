@@ -1,5 +1,4 @@
-﻿using Kaleidoscope.Logic.Complete.Simple.PureEqualityExactlyNElements;
-using Kaleidoscope.Logic.Complete.Simple.PureEqualityExactlyNElements.Statements;
+﻿using Kaleidoscope.Logic.Beaver.Abstractions.Oracle;
 using Kaleidoscope.Logic.Core.Abstractions;
 using Kaleidoscope.Logic.Core.Abstractions.Evaluation;
 using Kaleidoscope.Logic.Core.Abstractions.Statement;
@@ -8,12 +7,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace Kaleidoscope.Logic.Complete.Simple.Outside
+namespace Kaleidoscope.Logic.Beaver.SimpleBeaver
 {
-    public class OracleBeaver : BeaverBase, IYRLogicEvaluator
+    public class YRSimpleOracleBeaver : YRSimpleBeaverBase, IYRLogicEvaluator
     {
+        private readonly IYREqualityBeaverOracle _beaverOracle;
+
+        public YRSimpleOracleBeaver(IYREqualityBeaverOracle beaverOracle)
+        {
+            _beaverOracle = beaverOracle;
+        }
         public override bool CompareContext(IYRContext premise, IYRContext conclusion)
         {
             List<IYRStatement> premiseStatements = new List<IYRStatement>();
@@ -37,13 +41,8 @@ namespace Kaleidoscope.Logic.Complete.Simple.Outside
 
         private bool AskOracle(IYRStatement y, IYRStatement x)
         {
-            if(y == x)
-                return true;
-
-            if (y is Statement1 && x is Statement2)
-                return true;
-
-            return false;
+            var result = _beaverOracle.Forsee(y, x).GetAwaiter().GetResult();
+            return result;
         }
     }
 }

@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Kaleidoscope.Logic.Complete.Simple.PureEqualityExactlyNElements.Predicats
+namespace Kaleidoscope.Logic.Complete.Simple.PureEqualityExactlyNElements.Predicates
 {
     public class EqualityPredicate : YRSingleton<EqualityPredicate>, IYRBinaryPredicate, IYRAnnotatedPredicate
     {

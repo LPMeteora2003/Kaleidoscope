@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
@@ -10,21 +9,12 @@
   <ItemGroup>
     <ProjectReference Include="..\Kaleidoscope.Core.Abstractions\Kaleidoscope.Core.Abstractions.csproj" />
     <ProjectReference Include="..\Kaleidoscope.Core.Async.Abstractions\Kaleidoscope.Core.Async.Abstractions.csproj" />
-    <ProjectReference Include="..\Kaleidoscope.Core.Async\Kaleidoscope.Core.Async.csproj" />
-    <ProjectReference Include="..\Kaleidoscope.Core\Kaleidoscope.Core.csproj" />
     <ProjectReference Include="..\Kaleidoscope.Logic.Beaver.Abstractions\Kaleidoscope.Logic.Beaver.Abstractions.csproj" />
-    <ProjectReference Include="..\Kaleidoscope.Logic.Beaver\Kaleidoscope.Logic.Beaver.csproj" />
-    <ProjectReference Include="..\Kaleidoscope.Logic.Complete.Simple.Magic\Kaleidoscope.Logic.Complete.Simple.Magic.csproj" />
     <ProjectReference Include="..\Kaleidoscope.Logic.Complete.Simple.PresburgerArithmetic\Kaleidoscope.Logic.Complete.Simple.PresburgerArithmetic.csproj" />
+    <ProjectReference Include="..\Kaleidoscope.Logic.Complete.Simple.TarskiConsequenceRelation\Kaleidoscope.Logic.Complete.Simple.TarskiConsequenceRelation.csproj" />
     <ProjectReference Include="..\Kaleidoscope.Logic.Complete.Simple.YRPureEqualityExactlyNElements\Kaleidoscope.Logic.Complete.Simple.PureEqualityExactlyNElements.csproj" />
     <ProjectReference Include="..\Kaleidoscope.Logic.Complete.Simple\Kaleidoscope.Logic.Complete.Simple.csproj" />
     <ProjectReference Include="..\Kaleidoscope.Logic.Core.Abstractions\Kaleidoscope.Logic.Core.Abstractions.csproj" />
-    <ProjectReference Include="..\Kaleidoscope.Logic.Core\Kaleidoscope.Logic.Core.csproj" />
-    <ProjectReference Include="..\Kaleidoscope.Math.Core\Kaleidoscope.Math.Core.csproj" />
-    <ProjectReference Include="..\Kaleidoscope.Math.Set.Standard.Integers\Kaleidoscope.Math.Set.Standard.Integers.csproj" />
-    <ProjectReference Include="..\Kaleidoscope.Math.Set.Standard.Naturals\Kaleidoscope.Math.Set.Standard.Naturals.csproj" />
-    <ProjectReference Include="..\Kaleidoscope.Math.Set.Standard.Rationals\Kaleidoscope.Math.Set.Standard.Rationals.csproj" />
-    <ProjectReference Include="..\Kaleidoscope.Math.Set.Standard\Kaleidoscope.Math.Set.Standard.csproj" />
   </ItemGroup>
 
 </Project>

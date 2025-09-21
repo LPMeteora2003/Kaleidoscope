@@ -1,10 +1,9 @@
-﻿using Kaleidoscope.Logic.Complete.Simple.PureEqualityExactlyNElements;
-using Kaleidoscope.Logic.Core.Abstractions;
+﻿using Kaleidoscope.Logic.Core.Abstractions;
 using Kaleidoscope.Logic.Core.Abstractions.Evaluation;
 
-namespace Kaleidoscope.Logic.Complete.Simple.Outside
+namespace Kaleidoscope.Logic.Beaver.SimpleBeaver
 {
-    public abstract class BeaverBase : IYRLogicEvaluator
+    public abstract class YRSimpleBeaverBase : IYRLogicEvaluator
     {
         public object Evaluate(IYRLogicConstruct logicConstruct, IYRContext conclusion)
         {
@@ -18,9 +17,9 @@ namespace Kaleidoscope.Logic.Complete.Simple.Outside
         }
         private bool ComfirmingJudgement(IYRLogicConstruct logicConstruct, IYRContext conclusion)
         {
-            var judgement = YRPureEqualityExactlyNElementsTheory.Instance.Judgement;
+            var judgement = logicConstruct.Judgement;
 
-            if ((CompareContext(judgement.Premise, conclusion) && logicConstruct.Verdict == judgement.Verdict))
+            if (CompareContext(judgement.Premise, conclusion) && logicConstruct.Verdict == judgement.Verdict)
                 return true;
 
             while (judgement != judgement.Judgement)
@@ -28,7 +27,7 @@ namespace Kaleidoscope.Logic.Complete.Simple.Outside
                 var premise = judgement.Premise;
                 var comparisonResult = CompareContext(premise, conclusion);
 
-                if ((comparisonResult && logicConstruct.Verdict == judgement.Verdict))
+                if (comparisonResult && logicConstruct.Verdict == judgement.Verdict)
                     return true;
                 judgement = judgement.Judgement;
             }
@@ -38,7 +37,7 @@ namespace Kaleidoscope.Logic.Complete.Simple.Outside
 
         private bool ViolatingJudgement(IYRLogicConstruct logicConstruct, IYRContext conclusion)
         {
-            var judgement = YRPureEqualityExactlyNElementsTheory.Instance.Judgement;
+            var judgement = logicConstruct.Judgement;
 
             if (!(CompareContext(judgement.Premise, conclusion) ^ logicConstruct.Verdict != judgement.Verdict))
                 return true;

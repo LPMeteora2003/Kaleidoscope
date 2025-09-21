@@ -1,11 +1,15 @@
-﻿using Kaleidoscope.Logic.Complete.Simple.Outside;
+﻿using Kaleidoscope.Logic.Beaver.Abstractions;
+using Kaleidoscope.Logic.Beaver.Oracle;
+using Kaleidoscope.Logic.Beaver.SimpleBeaver;
+using Kaleidoscope.Logic.Complete.Simple.Magic;
 using Kaleidoscope.Logic.Complete.Simple.PureEqualityExactlyNElements;
 using Kaleidoscope.Logic.Complete.Simple.PureEqualityExactlyNElements.Contexts;
 using Kaleidoscope.Logic.Core.Abstractions.Evaluation;
 
+var beaverMagic = new YRPureEqualityExactlyNElementsBeaverOracleMagic();
 
-var simpleBeaver = new SimpleBeaver();
-var oracleBeaver = new OracleBeaver();
+var simpleBeaver = new YRSimpleBeaver();
+var oracleBeaver = new YRSimpleOracleBeaver(new YRSimpleEqualityBeaverOracle(beaverMagic));
 List<IYRLogicEvaluator> beavers = [simpleBeaver, oracleBeaver];
 foreach (var beaver in beavers)
 {
