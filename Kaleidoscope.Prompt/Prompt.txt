@@ -1,0 +1,1767 @@
+Have a look at my current code: 
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Demo\Program.cs ===
+using Kaleidoscope.Math.Core.Axiom;
+using Kaleidoscope.Math.Set;
+using Kaleidoscope.Math.Set.Standard.Abstractions.Integers;
+using Kaleidoscope.Math.Set.Standard.AbstractionsNaturalNumbers;
+using Kaleidoscope.Math.Set.Standard.Integers;
+using Kaleidoscope.Math.Set.Standard.Integers.Kuratowski;
+using Kaleidoscope.Math.Set.Standard.NaturalNumbers;
+using Kaleidoscope.Math.Set.Standard.Naturals.VonNeumann;
+using System.Numerics;
+
+var naturalFactories = new IYRNaturalNumberFactory[]
+{
+    new YRVonNeumannOrdinalFactory(),
+};
+var integerFactories = new IYRIntegerNumberFactory[]
+{
+    new YRKuratowskiIntegerNumberFactory(naturalFactories[0]),
+};
+
+var axiomaticSystem = new ZFAxiomaticSystem([new YREmptyAxiomSet(), new YRVonNeumannInfiniteAxiomSet()]);
+YRSet.AxiomaticSystem = axiomaticSystem;
+
+foreach(var factory in integerFactories)
+{
+    var naturalNumbers = new YRIntegerNumberSet(factory);
+    int emitted = 0;
+    await foreach (var n in naturalNumbers.Enumerate())
+    {
+        Console.WriteLine(n);
+        if (++emitted >= 99999) 
+            break;
+    }
+}
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Demo\Program.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Core.Abstractions\IAxiomaticSystem.cs ===
+using Kaleidoscope.Core.Async.Abstractions;
+using Kaleidoscope.Math.Set.Abstractions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Kaleidoscope.Math.Core.Abstractions
+{
+    public interface IAxiomaticSystem
+    {
+        public List<IYRAxiom> ExistanceAxioms { get; }
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Core.Abstractions\IAxiomaticSystem.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Core.Abstractions\IPredicate.cs ===
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Kaleidoscope.Math.Core.Abstractions
+{
+    public interface IPredicate
+    {
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Core.Abstractions\IPredicate.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Core.Abstractions\IYRAxiom.cs ===
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Kaleidoscope.Math.Set.Abstractions
+{
+    public interface IYRAxiom
+    {
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Core.Abstractions\IYRAxiom.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Core.Abstractions\IYRMetaClass.cs ===
+namespace Kaleidoscope.Math.Core.Abstractions
+{
+    /// <summary>
+    /// Mathematical classes like the "set of all sets"
+    /// </summary>
+    public interface IYRMetaClass
+    {
+
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Core.Abstractions\IYRMetaClass.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Core\Axiom\ZFAxiomaticSystem.cs ===
+using Kaleidoscope.Core.Async.Abstractions;
+using Kaleidoscope.Math.Core.Abstractions;
+using Kaleidoscope.Math.Set.Abstractions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Kaleidoscope.Math.Core.Axiom
+{
+    public class ZFAxiomaticSystem : IAxiomaticSystem
+    {
+        IEnumerable<IYRAxiom> _existanceAxioms;
+        public ZFAxiomaticSystem(IEnumerable<IYRAxiom> existanceAxioms)
+        {
+            _existanceAxioms = existanceAxioms;
+        }
+
+        public List<IYRAxiom> ExistanceAxioms => _existanceAxioms.ToList();
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Core\Axiom\ZFAxiomaticSystem.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Core\Predicate\FalsePredicate.cs ===
+using Kaleidoscope.Math.Core.Abstractions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Kaleidoscope.Math.Core.Predicate
+{
+    public class FalsePredicate : IPredicate
+    {
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Core\Predicate\FalsePredicate.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Core\Predicate\TruePredicate.cs ===
+using Kaleidoscope.Math.Core.Abstractions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Kaleidoscope.Math.Core.Predicate
+{
+    public class TruePredicate : IPredicate
+    {
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Core\Predicate\TruePredicate.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Operator.Abstractions\IYRBinaryOperator.cs ===
+using Kaleidoscope.Core.Async.Abstractions;
+using Kaleidoscope.Math.Core.Abstractions;
+using Kaleidoscope.Math.Set.Abstractions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Kaleidoscope.Math.Operator.Abstractions
+{
+    public interface IYRBinaryOperator : IYROperator
+    {
+    }
+    public interface IYRBinaryOperator<in TIn1, in TIn2, out TOut> : IYRBinaryOperator
+        where TIn1 : IYRSet
+        where TIn2 : IYRSet
+        where TOut : IYRSet
+    {
+        IValueTask<TOut> Apply(TIn1 element1, TIn2 element2);
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Operator.Abstractions\IYRBinaryOperator.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Operator.Abstractions\IYROperator.cs ===
+using Kaleidoscope.Math.Core.Abstractions;
+using Kaleidoscope.Math.Set.Abstractions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Kaleidoscope.Math.Operator.Abstractions
+{
+    public interface IYROperator : IYRSet
+    {
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Operator.Abstractions\IYROperator.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Operator.Abstractions\IYRUnaryOperator.cs ===
+using Kaleidoscope.Core.Async;
+using Kaleidoscope.Core.Async.Abstractions;
+using Kaleidoscope.Math.Core.Abstractions;
+using Kaleidoscope.Math.Set.Abstractions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Kaleidoscope.Math.Operator.Abstractions
+{
+    public interface IYRUnaryOperator : IYROperator
+    {
+    }
+    public interface IYRUnaryOperator<in TIn, out TOut> : IYRUnaryOperator
+        where TIn : IYRSet
+        where TOut : IYRSet
+    {
+        IValueTask<TOut> Apply(TIn element);
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Operator.Abstractions\IYRUnaryOperator.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Operator\BinaryOperator\YRIntersectionOperator.cs ===
+using Kaleidoscope.Core.Async.Abstractions;
+using Kaleidoscope.Math.Operator.Abstractions;
+using Kaleidoscope.Math.Set.Abstractions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Kaleidoscope.Math.Operator.BinaryOperator
+{
+    public class YRIntersectionOperator : IYRBinaryOperator
+    {
+        public async IValueTask<bool> Contains(IYRSet element)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IAsyncEnumerable<IYRSet> Enumerate()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IValueTask<IYRSet> Pair(IYRSet other)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IValueTask<IYRSet> Power()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IValueTask<IYRSet> Union()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IValueTask<bool> ZFEquals(IYRSet other)
+        {
+            throw new NotImplementedException();
+        }
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Operator\BinaryOperator\YRIntersectionOperator.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Operator\BinaryOperator\YRUnionOperator.cs ===
+using Kaleidoscope.Core.Async.Abstractions;
+using Kaleidoscope.Math.Operator.Abstractions;
+using Kaleidoscope.Math.Set.Abstractions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Kaleidoscope.Math.Operator.BinaryOperator
+{
+    public class YRUnionOperator : IYRBinaryOperator
+    {
+        public async IValueTask<bool> Contains(IYRSet element)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IAsyncEnumerable<IYRSet> Enumerate()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IValueTask<IYRSet> Pair(IYRSet other)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IValueTask<IYRSet> Power()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IValueTask<IYRSet> Union()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IValueTask<bool> ZFEquals(IYRSet other)
+        {
+            throw new NotImplementedException();
+        }
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Operator\BinaryOperator\YRUnionOperator.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Abstractions\Finite\IYREmptySet.cs ===
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Kaleidoscope.Math.Set.Abstractions.Finite
+{
+    public interface IYREmptySet : IYRFiniteSet
+    {
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Abstractions\Finite\IYREmptySet.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Abstractions\Finite\IYRFiniteSet.cs ===
+using Kaleidoscope.Core.Async.Abstractions;
+using Kaleidoscope.Math.Core.Abstractions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Kaleidoscope.Math.Set.Abstractions.Finite
+{
+    public interface IYRFiniteSet : IYRSet
+    {
+    }
+
+    public interface IYRFiniteSet<TElement> : IYRSet<TElement>, IYRFiniteSet
+        where TElement : IYRSet
+    {
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Abstractions\Finite\IYRFiniteSet.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Abstractions\Infinite\Countable\IYRCountableSet.cs ===
+using Kaleidoscope.Core.Async.Abstractions;
+using Kaleidoscope.Math.Core.Abstractions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
+using System.Xml.Linq;
+
+namespace Kaleidoscope.Math.Set.Abstractions.Infinite.Countable
+{
+    public interface IYRCountableSet : IYRInfiniteSet
+    {
+    }
+
+    public interface IYRCountableSet<TElement> : IYRInfiniteSet<TElement>, IYRCountableSet
+        where TElement : IYRSet
+    {
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Abstractions\Infinite\Countable\IYRCountableSet.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Abstractions\Infinite\Countable\IYRIndexableSet.cs ===
+using Kaleidoscope.Core.Async.Abstractions;
+using Kaleidoscope.Math.Core.Abstractions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
+using System.Xml.Linq;
+
+namespace Kaleidoscope.Math.Set.Abstractions.Infinite.Countable
+{
+    public interface IYRIndexableSet : IYRCountableSet
+    {
+        IValueTask<IYRSet> GetIndex(IYRSet element);
+    }
+
+    public interface IYRIndexableSet<TElement, TIndex> : IYRCountableSet<TElement>, IYRIndexableSet
+        where TElement : IYRSet
+        where TIndex : IYRSet
+    {
+        IValueTask<TElement> GetElement(TIndex index);
+        IValueTask<TIndex> GetIndex(TElement element);
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Abstractions\Infinite\Countable\IYRIndexableSet.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Abstractions\Infinite\IYRInfiniteSet.cs ===
+using Kaleidoscope.Core.Async.Abstractions;
+using Kaleidoscope.Math.Core.Abstractions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Kaleidoscope.Math.Set.Abstractions.Infinite
+{
+    public interface IYRInfiniteSet : IYRSet
+    {
+    }
+
+    public interface IYRInfiniteSet<TElement> : IYRSet<TElement>, IYRInfiniteSet
+        where TElement : IYRSet
+    {
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Abstractions\Infinite\IYRInfiniteSet.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Abstractions\Infinite\IYRUncountableSet.cs ===
+using Kaleidoscope.Core.Async.Abstractions;
+using Kaleidoscope.Math.Core.Abstractions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Kaleidoscope.Math.Set.Abstractions.Infinite
+{
+    public interface IYRUncountableSet : IYRInfiniteSet
+    {
+    }
+
+    public interface IYRUncountableSet<TElement> : IYRInfiniteSet<TElement>, IYRUncountableSet
+        where TElement : IYRSet
+    {
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Abstractions\Infinite\IYRUncountableSet.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Abstractions\IYRAxiomSet.cs ===
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Kaleidoscope.Math.Set.Abstractions
+{
+    public interface IYRAxiomSet : IYRAxiom, IYRSet
+    {
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Abstractions\IYRAxiomSet.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Abstractions\IYRSet.cs ===
+using Kaleidoscope.Core.Async.Abstractions;
+using Kaleidoscope.Core.Async.MorseCode;
+using Kaleidoscope.Math.Core.Abstractions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Xml.Linq;
+
+namespace Kaleidoscope.Math.Set.Abstractions
+{
+    public interface IYRSet
+    {
+        IValueTask<bool> Contains(IYRSet element);
+        IValueTask<bool> ZFEquals(IYRSet other);
+        IValueTask<IYRSet> Pair(IYRSet other);
+        IValueTask<IYRSet> Union();
+        IValueTask<IYRSet> Power();
+        IAsyncEnumerable<IYRSet> Enumerate();
+
+    }
+
+    public interface IYRSet<TElement> : IYRSet
+        where TElement : IYRSet
+    {
+
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Abstractions\IYRSet.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Standard.Abstractions\Complex\IYRComplexNumber.cs ===
+using Kaleidoscope.Core.Async.Abstractions;
+using Kaleidoscope.Math.Set.Abstractions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Kaleidoscope.Math.Set.Standard.Abstractions.Complex
+{
+    public interface IYRComplexNumber : IYRSet<IYRComplexNumber>
+    {
+
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Standard.Abstractions\Complex\IYRComplexNumber.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Standard.Abstractions\Complex\IYRComplexNumberSet.cs ===
+using Kaleidoscope.Core.Async.Abstractions;
+using Kaleidoscope.Math.Set.Abstractions.Infinite;
+using Kaleidoscope.Math.Set.Abstractions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Kaleidoscope.Math.Set.Standard.Abstractions.Complex;
+
+namespace Kaleidoscope.Math.Set.Standard.AbstractionsComplex
+{
+    public interface IYRComplexNumberSet : IYRUncountableSet<IYRComplexNumber>
+    {
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Standard.Abstractions\Complex\IYRComplexNumberSet.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Standard.Abstractions\Integers\IYRIntegerNumber.cs ===
+using Kaleidoscope.Core.Async.Abstractions.YRValueTask;
+using Kaleidoscope.Core.Async.Abstractions;
+using Kaleidoscope.Math.Set.Abstractions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
+using System.Text;
+using System.Threading.Tasks;
+using Kaleidoscope.Math.Set.Abstractions.Finite;
+
+namespace Kaleidoscope.Math.Set.Standard.AbstractionsIntegers
+{
+    public interface IYRIntegerNumber : IYRSet
+    {
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Standard.Abstractions\Integers\IYRIntegerNumber.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Standard.Abstractions\Integers\IYRIntegerNumberFactory.cs ===
+using Kaleidoscope.Core.Async.Abstractions;
+using Kaleidoscope.Math.Set.Standard.AbstractionsIntegers;
+using Kaleidoscope.Math.Set.Standard.AbstractionsNaturalNumbers;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Kaleidoscope.Math.Set.Standard.Abstractions.Integers
+{
+    public interface IYRIntegerNumberFactory
+    {
+        IValueTask<IYRIntegerNumber> GenerateZero();
+        IValueTask<IYRIntegerNumber> Generate(BigInteger value);
+        IValueTask<IYRIntegerNumber> GeneratePredecessor(IYRIntegerNumber successor);
+        IValueTask<IYRIntegerNumber> GenerateSuccessor(IYRIntegerNumber predecessor);
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Standard.Abstractions\Integers\IYRIntegerNumberFactory.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Standard.Abstractions\Integers\IYRIntegerNumberSet.cs ===
+using Kaleidoscope.Core.Async.Abstractions.YRValueTask;
+using Kaleidoscope.Core.Async.Abstractions;
+using Kaleidoscope.Math.Set.Abstractions.Infinite.Countable;
+using Kaleidoscope.Math.Set.Abstractions;
+using Kaleidoscope.Math.Set.Standard.AbstractionsNaturalNumbers;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Kaleidoscope.Math.Set.Standard.AbstractionsIntegers
+{
+    public interface IYRIntegerNumberSet : IYRIndexableSet<IYRIntegerNumber, IYRNaturalNumber>
+    {
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Standard.Abstractions\Integers\IYRIntegerNumberSet.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Standard.Abstractions\Naturals\IYRNaturalNumber.cs ===
+using System;
+using System.Numerics;
+using System.Threading.Tasks;
+using Kaleidoscope.Core.Async.Abstractions;
+using Kaleidoscope.Core.Async.Abstractions.YRValueTask;
+using Kaleidoscope.Math.Set.Abstractions;
+using Kaleidoscope.Math.Set.Abstractions.Finite;
+
+namespace Kaleidoscope.Math.Set.Standard.AbstractionsNaturalNumbers
+{
+    public interface IYRNaturalNumber : IYRSet
+    {
+
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Standard.Abstractions\Naturals\IYRNaturalNumber.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Standard.Abstractions\Naturals\IYRNaturalNumberFactory.cs ===
+using System;
+using System.Numerics;
+using System.Threading.Tasks;
+using Kaleidoscope.Core.Async.Abstractions;
+using Kaleidoscope.Core.Async.Abstractions.YRValueTask;
+using Kaleidoscope.Math.Set.Abstractions;
+
+namespace Kaleidoscope.Math.Set.Standard.AbstractionsNaturalNumbers
+{
+    public interface IYRNaturalNumberFactory
+    {
+        IValueTask<IYRNaturalNumber> GenerateZero();
+        IValueTask<IYRNaturalNumber> Generate(BigInteger value);
+        IValueTask<IYRNaturalNumber> GenerateSuccessor(IYRNaturalNumber predecessor);
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Standard.Abstractions\Naturals\IYRNaturalNumberFactory.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Standard.Abstractions\Naturals\IYRNaturalNumberSet.cs ===
+using System;
+using System.Collections.Generic;
+using System.Numerics;
+using System.Threading.Tasks;
+using Kaleidoscope.Core.Async.Abstractions;
+using Kaleidoscope.Core.Async.Abstractions.YRValueTask;
+using Kaleidoscope.Math.Set.Abstractions;
+using Kaleidoscope.Math.Set.Abstractions.Infinite.Countable;
+
+namespace Kaleidoscope.Math.Set.Standard.AbstractionsNaturalNumbers
+{
+    public interface IYRNaturalNumberSet : IYRIndexableSet<IYRNaturalNumber, IYRNaturalNumber>
+    {
+        
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Standard.Abstractions\Naturals\IYRNaturalNumberSet.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Standard.Abstractions\Rationals\IYRRationalNumber.cs ===
+using Kaleidoscope.Core.Async.Abstractions.YRValueTask;
+using Kaleidoscope.Core.Async.Abstractions;
+using Kaleidoscope.Math.Set.Abstractions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Kaleidoscope.Math.Set.Standard.AbstractionsRationals
+{
+    public interface IYRRationalNumber : IYRSet<IYRRationalNumber>
+    {
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Standard.Abstractions\Rationals\IYRRationalNumber.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Standard.Abstractions\Rationals\IYRRationalNumberSet.cs ===
+using Kaleidoscope.Core.Async.Abstractions.YRValueTask;
+using Kaleidoscope.Core.Async.Abstractions;
+using Kaleidoscope.Math.Set.Abstractions.Infinite.Countable;
+using Kaleidoscope.Math.Set.Abstractions;
+using Kaleidoscope.Math.Set.Standard.AbstractionsNaturalNumbers;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Kaleidoscope.Math.Set.Standard.AbstractionsRationals
+{
+    public interface IYRRationalNumberSet : IYRCountableSet<IYRRationalNumber>
+    {
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Standard.Abstractions\Rationals\IYRRationalNumberSet.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Standard.Abstractions\Reals\IYRRealNumber.cs ===
+using Kaleidoscope.Core.Async.Abstractions;
+using Kaleidoscope.Math.Set.Abstractions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Kaleidoscope.Math.Set.Standard.AbstractionsReals
+{
+    public interface IYRRealNumber : IYRSet<IYRRealNumber>
+    {
+
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Standard.Abstractions\Reals\IYRRealNumber.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Standard.Abstractions\Reals\IYRRealNumberSet.cs ===
+using Kaleidoscope.Core.Async.Abstractions;
+using Kaleidoscope.Math.Set.Abstractions.Infinite;
+using Kaleidoscope.Math.Set.Abstractions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Kaleidoscope.Math.Set.Standard.AbstractionsReals
+{
+    public interface IYRRealNumberSet : IYRUncountableSet<IYRRealNumber>
+    {
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Standard.Abstractions\Reals\IYRRealNumberSet.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Standard.Integers\Kuratowski\YRKuratowskiIntegerNumber.cs ===
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
+using Kaleidoscope.Core.Async.Abstractions.YRValueTask;
+using Kaleidoscope.Core.Async.Abstractions;
+using Kaleidoscope.Math.Set.Abstractions;
+using Kaleidoscope.Math.Set.Abstractions.Finite;
+using Kaleidoscope.Math.Set.Standard.AbstractionsIntegers;
+using Kaleidoscope.Math.Set.Standard.AbstractionsNaturalNumbers;
+using System.Xml.Linq;
+using Kaleidoscope.Math.Set.Finite;
+
+namespace Kaleidoscope.Math.Set.Standard.Integers.Kuratowski
+{
+    public class YRKuratowskiIntegerNumber : YRFiniteSet, IYRIntegerNumber
+    {
+        public IYRNaturalNumber Left => (_elements[0] as YRFiniteSet).Elements[0] as IYRNaturalNumber;
+        public IYRNaturalNumber Right => (_elements[1] as YRFiniteSet).Elements[1] as IYRNaturalNumber;
+        public YRKuratowskiIntegerNumber(IYRNaturalNumber x, IYRNaturalNumber y)
+            : base([new YRFiniteSet([x]), new YRFiniteSet([x,y])])
+        {
+        }
+
+        public async ValueTask<string> ToStringAsync()
+        {
+            var lastElement = _elements.Last();
+            if (_elements.Last() == YRSet.Empty)
+                return "0";
+            var countRight = await Right.Enumerate().CountAsync() - 1;
+            var countLeft = await Left.Enumerate().CountAsync() - 1;
+            return (countLeft - countRight).ToString();
+        }
+        public override string ToString()
+        {
+            if(Left == YRSet.Empty)
+                return "0";
+            var countRight = (Right as YRFiniteSet).Elements.Count;
+            var countLeft = (Left as YRFiniteSet).Elements.Count;
+            return (countLeft - countRight).ToString();
+        }
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Standard.Integers\Kuratowski\YRKuratowskiIntegerNumber.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Standard.Integers\Kuratowski\YRKuratowskiIntegerNumberFactory.cs ===
+using System;
+using System.Numerics;
+using System.Threading.Tasks;
+using Kaleidoscope.Core.Async.Abstractions.YRValueTask;
+using Kaleidoscope.Core.Async.Abstractions;
+using Kaleidoscope.Math.Set.Abstractions;
+using Kaleidoscope.Math.Set.Standard.AbstractionsIntegers;
+using Kaleidoscope.Math.Set.Standard.Abstractions.Integers;
+using Kaleidoscope.Math.Set.Standard.AbstractionsNaturalNumbers;
+using Kaleidoscope.Math.Set.Standard.Integers.Kuratowski;
+
+namespace Kaleidoscope.Math.Set.Standard.Integers
+{
+    public class YRKuratowskiIntegerNumberFactory : IYRIntegerNumberFactory
+    {
+        private readonly IYRNaturalNumberFactory _naturalFactory;
+
+        public YRKuratowskiIntegerNumberFactory(IYRNaturalNumberFactory naturalFactory)
+        {
+            _naturalFactory = naturalFactory ?? throw new ArgumentNullException(nameof(naturalFactory));
+        }
+
+        public async IValueTask<IYRIntegerNumber> Generate(BigInteger value)
+        {
+            var leftValue = value > BigInteger.Zero ? value : BigInteger.Zero;
+            var rightValue = value < BigInteger.Zero ? BigInteger.Negate(value) : BigInteger.Zero;
+
+            var left = await _naturalFactory.Generate(leftValue);
+            var right = await _naturalFactory.Generate(rightValue);
+
+            return new YRKuratowskiIntegerNumber(left, right);
+        }
+
+        public async IValueTask<IYRIntegerNumber> GeneratePredecessor(IYRIntegerNumber successor)
+        {
+            if (successor is null) 
+                throw new ArgumentNullException(nameof(successor));
+            if (successor is not YRKuratowskiIntegerNumber kur)
+                throw new NotImplementedException("GeneratePredecessor supports only YRKuratowskiIntegerNumber instances.");
+            
+            var left = kur.Left;
+            if (left == YRSet.Empty)
+                return new YRKuratowskiIntegerNumber(await _naturalFactory.Generate(0), await _naturalFactory.Generate(1));
+            var right = kur.Right;
+            var newRight = await _naturalFactory.GenerateSuccessor(right);
+            return new YRKuratowskiIntegerNumber(left, newRight);            
+        }
+
+        public async IValueTask<IYRIntegerNumber> GenerateSuccessor(IYRIntegerNumber predecessor)
+        {
+            if (predecessor is null)
+                throw new ArgumentNullException(nameof(predecessor));
+            if (predecessor is not YRKuratowskiIntegerNumber kur)
+                throw new NotImplementedException("GeneratePredecessor supports only YRKuratowskiIntegerNumber instances.");
+
+            var left = kur.Left;
+            if (left == YRSet.Empty)
+                return new YRKuratowskiIntegerNumber(await _naturalFactory.Generate(1), await _naturalFactory.Generate(0));
+            var right = kur.Right;
+            var newLeft = await _naturalFactory.GenerateSuccessor(left);
+            return new YRKuratowskiIntegerNumber(newLeft, right);
+        }
+
+        public async IValueTask<IYRIntegerNumber> GenerateZero()
+        {
+            return await Generate(BigInteger.Zero);
+        }
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Standard.Integers\Kuratowski\YRKuratowskiIntegerNumberFactory.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Standard.Integers\YRIntegerNumberSet.cs ===
+using System;
+using System.Collections.Generic;
+using System.Numerics;
+using System.Threading.Tasks;
+using Kaleidoscope.Core.Async.Abstractions;
+using Kaleidoscope.Math.Set.Abstractions.Infinite.Countable;
+using Kaleidoscope.Math.Set.Abstractions;
+using Kaleidoscope.Math.Set.Standard.AbstractionsIntegers;
+using Kaleidoscope.Math.Set.Standard.AbstractionsNaturalNumbers;
+using Kaleidoscope.Math.Set.Standard.Integers.Kuratowski;
+using Kaleidoscope.Math.Set.Standard.Abstractions.Integers;
+
+namespace Kaleidoscope.Math.Set.Standard.Integers
+{
+    public class YRIntegerNumberSet : YRSet, IYRIntegerNumberSet
+    {
+        private readonly IYRIntegerNumberFactory _factory;
+
+        public YRIntegerNumberSet(IYRIntegerNumberFactory factory)
+        {
+            _factory = factory ?? throw new ArgumentNullException(nameof(factory));            
+        }
+
+
+        public override async IValueTask<bool> Contains(IYRSet element)
+        {
+            if (element is null) return false;
+            return element is IYRIntegerNumber;
+        }
+
+        public override async IAsyncEnumerable<IYRIntegerNumber> Enumerate()
+        {
+            var zero = await _factory.GenerateZero();
+            var currentNegative = zero;
+            var currentPositive = zero;
+            yield return zero;
+            while (true)
+            {
+                currentPositive = await _factory.GeneratePredecessor(currentPositive);
+                yield return currentPositive;
+                currentNegative = await _factory.GenerateSuccessor(currentNegative);
+                yield return currentNegative;                 
+            }
+        }
+
+        public async IValueTask<IYRIntegerNumber> GetElement(IYRNaturalNumber index)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IValueTask<IYRIntegerNumber> GetElement(IYRSet index)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async IValueTask<IYRNaturalNumber> GetIndex(IYRIntegerNumber element)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override IValueTask<bool> ZFEquals(IYRSet other)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override IValueTask<IYRSet> Union()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override IValueTask<IYRSet> Power()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IValueTask<IYRSet> GetIndex(IYRSet element)
+        {
+            throw new NotImplementedException();
+        }
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Standard.Integers\YRIntegerNumberSet.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Standard.Naturals\VonNeumann\YRVonNeumannOrdinal.cs ===
+using Kaleidoscope.Core.Async.Abstractions;
+using Kaleidoscope.Math.Set.Abstractions;
+using Kaleidoscope.Math.Set.Finite;
+using Kaleidoscope.Math.Set.Standard.AbstractionsNaturalNumbers;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Kaleidoscope.Math.Set.Standard.Naturals.VonNeumann
+{
+    public class YRVonNeumannOrdinal : YRFiniteSet, IYRNaturalNumber
+    {
+        public List<IYRSet> Elements => _elements.ToList();
+        public YRVonNeumannOrdinal(IEnumerable<IYRSet> elements) : base(elements)
+        {
+        }
+
+        public async ValueTask<string> ToStringAsync()
+        {
+            var lastElement = _elements.Last();
+            if (_elements.Last() == YRSet.Empty)
+                return "0";
+            var count = await _elements.Last().Enumerate().CountAsync() - 1;
+            return count.ToString();
+        }
+        public override string ToString()
+        {
+            return (_elements.Count - 1).ToString();
+        }
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Standard.Naturals\VonNeumann\YRVonNeumannOrdinal.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Standard.Naturals\VonNeumann\YRVonNeumannOrdinalFactory.cs ===
+using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Numerics;
+using System.Threading;
+using Kaleidoscope.Core.Async.Abstractions;
+using Kaleidoscope.Math.Set.Abstractions;
+using Kaleidoscope.Math.Set.Standard.AbstractionsNaturalNumbers;
+
+namespace Kaleidoscope.Math.Set.Standard.Naturals.VonNeumann
+{
+    public class YRVonNeumannOrdinalFactory : IYRNaturalNumberFactory
+    {
+
+        public YRVonNeumannOrdinalFactory()
+        {
+        }
+
+        public async IValueTask<IYRNaturalNumber> Generate(BigInteger value)
+        {
+            BigInteger counter = 0;
+            var current = (YRVonNeumannOrdinal) await GenerateZero();
+            while(counter < value)
+            {
+                current = new YRVonNeumannOrdinal([.. current.Elements, current]);
+            }
+            return current;
+        }
+
+        public async IValueTask<IYRNaturalNumber> GenerateSuccessor(IYRNaturalNumber predecessor)
+        {
+            if (predecessor is null)
+                throw new ArgumentNullException(nameof(predecessor));
+            if (predecessor is not YRVonNeumannOrdinal vonNeumannOrdinal)
+                throw new NotImplementedException();
+
+            var enumeratedPredecessor = vonNeumannOrdinal.Elements;
+            return new YRVonNeumannOrdinal([..enumeratedPredecessor, predecessor]);
+        }
+
+        public async IValueTask<IYRNaturalNumber> GenerateZero()
+        {
+            return new YRVonNeumannOrdinal([YRSet.Empty]);
+        }
+
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Standard.Naturals\VonNeumann\YRVonNeumannOrdinalFactory.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Standard.Naturals\YRNaturalNumberSet.cs ===
+using System;
+using System.Collections.Generic;
+using System.Numerics;
+using System.Reflection;
+using System.Threading.Tasks;
+using System.Xml.Linq;
+using Kaleidoscope.Core.Async.Abstractions;
+using Kaleidoscope.Core.Async.Abstractions.YRValueTask;
+using Kaleidoscope.Math.Set.Abstractions;
+using Kaleidoscope.Math.Set.Abstractions.Infinite.Countable;
+using Kaleidoscope.Math.Set.Standard.AbstractionsNaturalNumbers;
+
+namespace Kaleidoscope.Math.Set.Standard.NaturalNumbers
+{
+    public class YRNaturalNumberSet : YRSet, IYRNaturalNumberSet
+    {
+        IYRNaturalNumberFactory _factory;
+        public YRNaturalNumberSet(IYRNaturalNumberFactory factory)
+        {
+            _factory = factory;
+        }
+
+        public override async IAsyncEnumerable<IYRSet> Enumerate()
+        {
+            var current = await _factory.GenerateZero();
+            while (true)
+            {
+                yield return current;
+                current = await _factory.GenerateSuccessor(current);
+            }
+        }
+
+        public IValueTask<IYRSet> GetElement(IYRSet index)
+        {
+            if (index is null)
+                throw new System.ArgumentNullException(nameof(index));
+            if (index is IYRNaturalNumber nat)
+                return GetElement(nat);
+            throw new System.InvalidOperationException("Index must be a IYRNaturalNumber");
+        }
+
+        public IValueTask<IYRSet> GetIndex(IYRSet element)
+        {
+            if (element is null)
+                throw new System.ArgumentNullException(nameof(element));
+            if (element is IYRNaturalNumber nat)
+                return GetIndex(nat);
+            throw new System.InvalidOperationException("Element must be a IYRNaturalNumber");
+        }
+
+        public async IValueTask<IYRNaturalNumber> GetElement(IYRNaturalNumber index)
+        {
+            return index;
+        }
+
+        public async IValueTask<IYRNaturalNumber> GetIndex(IYRNaturalNumber element)
+        {
+            return element;
+        }
+
+        public override async IValueTask<bool> Contains(IYRSet element)
+        {
+            if (element is IYRNaturalNumber nat)
+                return true;
+            return false;
+        }
+
+        public override async IValueTask<bool> ZFEquals(IYRSet other)
+        {
+            return other is IYRNaturalNumberSet;
+        }
+
+        public override IValueTask<IYRSet> Union()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override IValueTask<IYRSet> Power()
+        {
+            throw new NotImplementedException();
+        }
+
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Standard.Naturals\YRNaturalNumberSet.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Standard\Complex\YRComplexNumber.cs ===
+using Kaleidoscope.Core.Async.Abstractions;
+using Kaleidoscope.Math.Set.Abstractions;
+using Kaleidoscope.Math.Set.Standard.Abstractions.Complex;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Kaleidoscope.Math.Set.Standard.Complex
+{
+    public class YRComplexNumber : IYRComplexNumber
+    {
+        public IValueTask<bool> Contains(IYRComplexNumber element)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IValueTask<bool> Contains(IYRSet element)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IAsyncEnumerable<IYRSet> Enumerate()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IValueTask<IYRSet> Pair(IYRSet other)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IValueTask<IYRSet> Power()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IValueTask<IYRSet> Union()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IValueTask<bool> ZFEquals(IYRSet other)
+        {
+            throw new NotImplementedException();
+        }
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Standard\Complex\YRComplexNumber.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Standard\Complex\YRComplexNumberSet.cs ===
+using Kaleidoscope.Core.Async.Abstractions;
+using Kaleidoscope.Math.Set.Abstractions.Infinite;
+using Kaleidoscope.Math.Set.Abstractions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Kaleidoscope.Math.Set.Standard.AbstractionsComplex;
+using Kaleidoscope.Math.Set.Standard.Abstractions.Complex;
+
+namespace Kaleidoscope.Math.Set.Standard.Complex
+{
+    public class YRComplexNumberSet : IYRComplexNumberSet
+    {
+        public IValueTask<bool> Contains(IYRComplexNumber element)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IValueTask<bool> Contains(IYRSet element)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IAsyncEnumerable<IYRSet> Enumerate()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IValueTask<IYRSet> Pair(IYRSet other)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IValueTask<IYRSet> Power()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IValueTask<IYRSet> Union()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IValueTask<bool> ZFEquals(IYRSet other)
+        {
+            throw new NotImplementedException();
+        }
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Standard\Complex\YRComplexNumberSet.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Standard\Rationals\YRRationalNumber.cs ===
+using Kaleidoscope.Core.Async.Abstractions.YRValueTask;
+using Kaleidoscope.Core.Async.Abstractions;
+using Kaleidoscope.Math.Set.Abstractions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
+using System.Text;
+using System.Threading.Tasks;
+using Kaleidoscope.Math.Set.Standard.AbstractionsRationals;
+
+namespace Kaleidoscope.Math.Set.Standard.Rationals
+{
+    public class YRRationalNumber : IYRRationalNumber
+    {
+        public IValueTask<bool> Contains(IYRRationalNumber element)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IValueTask<bool> Contains(IYRSet element)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IAsyncEnumerable<IYRSet> Enumerate()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IValueTask<IYRSet> Pair(IYRSet other)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IValueTask<IYRSet> Power()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IValueTask<IYRSet> Union()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IValueTask<bool> ZFEquals(IYRSet other)
+        {
+            throw new NotImplementedException();
+        }
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Standard\Rationals\YRRationalNumber.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Standard\Rationals\YRRationalNumberSet.cs ===
+using Kaleidoscope.Core.Async.Abstractions.YRValueTask;
+using Kaleidoscope.Core.Async.Abstractions;
+using Kaleidoscope.Math.Set.Abstractions.Infinite.Countable;
+using Kaleidoscope.Math.Set.Abstractions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
+using System.Text;
+using System.Threading.Tasks;
+using Kaleidoscope.Math.Set.Standard.AbstractionsRationals;
+
+namespace Kaleidoscope.Math.Set.Standard.Rationals
+{
+    public class YRRationalNumberSet : IYRRationalNumberSet
+    {
+        public IValueTask<bool> Contains(IYRRationalNumber element)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IValueTask<bool> Contains(IYRSet element)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IAsyncEnumerable<IYRRationalNumber> Enumerate()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IValueTask<IYRRationalNumber> GetElement(IYRSet index)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IValueTask<IYRSet> Pair(IYRSet other)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IValueTask<IYRSet> Power()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IValueTask<IYRSet> Union()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IValueTask<bool> ZFEquals(IYRSet other)
+        {
+            throw new NotImplementedException();
+        }
+
+        IAsyncEnumerable<IYRSet> IYRSet.Enumerate()
+        {
+            throw new NotImplementedException();
+        }
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Standard\Rationals\YRRationalNumberSet.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Standard\Reals\YRRealNumber.cs ===
+using Kaleidoscope.Core.Async.Abstractions;
+using Kaleidoscope.Math.Set.Abstractions;
+using Kaleidoscope.Math.Set.Standard.AbstractionsReals;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Kaleidoscope.Math.Set.Standard.Reals
+{
+    public class YRRealNumber : IYRRealNumber
+    {
+        public IValueTask<bool> Contains(IYRRealNumber element)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IValueTask<bool> Contains(IYRSet element)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IAsyncEnumerable<IYRSet> Enumerate()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IValueTask<IYRSet> Pair(IYRSet other)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IValueTask<IYRSet> Power()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IValueTask<IYRSet> Union()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IValueTask<bool> ZFEquals(IYRSet other)
+        {
+            throw new NotImplementedException();
+        }
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Standard\Reals\YRRealNumber.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Standard\Reals\YRRealNumberSet.cs ===
+using Kaleidoscope.Core.Async.Abstractions;
+using Kaleidoscope.Math.Set.Abstractions.Infinite;
+using Kaleidoscope.Math.Set.Abstractions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Kaleidoscope.Math.Set.Standard.AbstractionsReals;
+
+namespace Kaleidoscope.Math.Set.Standard.Reals
+{
+    public class YRRealNumberSet : IYRRealNumberSet
+    {
+        public IValueTask<bool> Contains(IYRRealNumber element)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IValueTask<bool> Contains(IYRSet element)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IAsyncEnumerable<IYRSet> Enumerate()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IValueTask<IYRSet> Pair(IYRSet other)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IValueTask<IYRSet> Power()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IValueTask<IYRSet> Union()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IValueTask<bool> ZFEquals(IYRSet other)
+        {
+            throw new NotImplementedException();
+        }
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set.Standard\Reals\YRRealNumberSet.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set\Factory\YRSetFactory.cs ===
+using Kaleidoscope.Math.Set.Abstractions;
+using Kaleidoscope.Math.Set.Abstractions.Finite;
+using Kaleidoscope.Math.Set.Finite;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Kaleidoscope.Math.Set.Factory
+{
+    public static class YRSetFactory
+    {
+        public static async ValueTask<IYRFiniteSet> CreateSet(IEnumerable<IYRSet> sets)
+        {
+            if (sets == null || sets.Count() == 0)
+                return YRSet.Empty;
+            return new YRFiniteSet(sets);
+        }
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set\Factory\YRSetFactory.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set\Finite\YREmptySet.cs ===
+using Kaleidoscope.Core.Async.Abstractions;
+using Kaleidoscope.Math.Set.Abstractions;
+using Kaleidoscope.Math.Set.Abstractions.Finite;
+using Kaleidoscope.Math.Set.Factory;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Xml.Linq;
+
+namespace Kaleidoscope.Math.Set.Finite
+{
+    public struct YREmptySet : IYREmptySet, IYRFiniteSet
+    {
+        public async IValueTask<bool> Contains(IYRSet element) => false;
+
+        public IAsyncEnumerable<IYRSet> Enumerate() => AsyncEnumerable.Empty<IYRSet>(); 
+
+        public async IValueTask<IYRSet> Pair(IYRSet other)
+        {
+            return other is IYREmptySet
+                ? await YRSet.CreateSet(new IYRSet[] { this })
+                : await YRSet.CreateSet(new IYRSet[] { this, other });
+        }
+
+        public async IValueTask<IYRSet> Power() => this;
+
+        public async IValueTask<IYRSet> Union() => this;
+
+        public async IValueTask<bool> ZFEquals(IYRSet other) => other is YREmptySet;        
+        public static bool operator ==(YREmptySet left, IYRSet right) => right is YREmptySet;
+        public static bool operator ==(IYRSet left, YREmptySet right) => left is YREmptySet;
+        public static bool operator !=(YREmptySet left, IYRSet right) => right is not YREmptySet;
+        public static bool operator !=(IYRSet left, YREmptySet right) => left is not YREmptySet;
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set\Finite\YREmptySet.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set\Finite\YRFiniteSet.cs ===
+using Kaleidoscope.Core.Async.Abstractions;
+using Kaleidoscope.Math.Set.Abstractions;
+using Kaleidoscope.Math.Set.Abstractions.Finite;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Xml.Linq;
+
+namespace Kaleidoscope.Math.Set.Finite
+{
+    public class YRFiniteSet : YRSet, IYRFiniteSet
+    {
+        protected IReadOnlyList<IYRSet> _elements;
+        public List<IYRSet> Elements => _elements.ToList();
+        protected YRFiniteSet()
+        {
+
+        }
+        public YRFiniteSet(IEnumerable<IYRSet> elements)
+        {
+            if (elements is null) 
+                throw new ArgumentNullException(nameof(elements));
+            var potential = elements.Distinct().ToArray();
+            if(potential.Length == 0)
+                throw new ArgumentNullException("Impossible");
+            _elements = potential;
+        }
+
+        public override async IValueTask<bool> Contains(IYRSet element)
+        {
+            foreach(var e in _elements)
+            {
+                if(e.Equals(element)) 
+                    return true;
+            }
+            return false;
+        }
+
+        public override async IValueTask<bool> ZFEquals(IYRSet other)
+        {
+            if (other is not IYRFiniteSet finiteSet)
+                return false;
+
+            await foreach (var otherElement in finiteSet.Enumerate())
+            {
+                if (await Contains(otherElement))
+                    return true;
+            }
+            return false;
+        }
+        public override IAsyncEnumerable<IYRSet> Enumerate()
+        {
+            return _elements.ToAsyncEnumerable();
+        }
+
+        public override IValueTask<IYRSet> Union()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override IValueTask<IYRSet> Power()
+        {
+            throw new NotImplementedException();
+        }
+        public override string ToString()
+        {
+            return $"FiniteSet[{string.Join(", ", _elements.Select(e => e?.ToString() ?? "null"))}]";
+        }
+
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set\Finite\YRFiniteSet.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set\Finite\YRFiniteSet[Generic].cs ===
+using Kaleidoscope.Core.Async.Abstractions;
+using Kaleidoscope.Math.Set.Abstractions;
+using Kaleidoscope.Math.Set.Abstractions.Finite;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Kaleidoscope.Math.Set.Finite
+{
+    public class YRFiniteSet<TElement> : IYRFiniteSet<TElement>
+        where TElement : IYRSet
+    {
+        public IValueTask<bool> Contains(IYRSet element)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IAsyncEnumerable<IYRSet> Enumerate()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IValueTask<IYRSet> Pair(IYRSet other)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IValueTask<IYRSet> Power()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IValueTask<IYRSet> Union()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IValueTask<bool> ZFEquals(IYRSet other)
+        {
+            throw new NotImplementedException();
+        }
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set\Finite\YRFiniteSet[Generic].cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set\YREmptyAxiomSet.cs ===
+using Kaleidoscope.Core.Async.Abstractions;
+using Kaleidoscope.Math.Set.Abstractions;
+using Kaleidoscope.Math.Set.Abstractions.Finite;
+using Kaleidoscope.Math.Set.Finite;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Kaleidoscope.Math.Set
+{
+    public struct YREmptyAxiomSet : IYREmptySet, IYRAxiomSet
+    {
+        YREmptySet _emptySet;
+        public YREmptySet EmptySet => _emptySet;
+        public IValueTask<bool> Contains(IYRSet element) => _emptySet.Contains(element);
+
+
+        public IValueTask<IYRSet> Pair(IYRSet other) => _emptySet.Pair(other);
+        public IValueTask<IYRSet> Power() => _emptySet.Power();
+        public IValueTask<IYRSet> Union() => _emptySet.Union();
+        public IValueTask<bool> ZFEquals(IYRSet other) => _emptySet.ZFEquals(other);
+        public IAsyncEnumerable<IYRSet> Enumerate() => _emptySet.Enumerate();
+        public static bool operator ==(YREmptyAxiomSet left, IYRSet right) => right is IYRAxiom;
+        public static bool operator ==(IYRSet left, YREmptyAxiomSet right) => left is IYRAxiom;
+        public static bool operator !=(YREmptyAxiomSet left, IYRSet right) => right is not IYRAxiom;
+        public static bool operator !=(IYRSet left, YREmptyAxiomSet right) => left is not IYRAxiom;
+
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set\YREmptyAxiomSet.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set\YRSet.cs ===
+using Kaleidoscope.Core.Async.Abstractions;
+using Kaleidoscope.Math.Core.Abstractions;
+using Kaleidoscope.Math.Set.Abstractions;
+using Kaleidoscope.Math.Set.Abstractions.Finite;
+using Kaleidoscope.Math.Set.Abstractions.Infinite;
+using Kaleidoscope.Math.Set.Factory;
+using Kaleidoscope.Math.Set.Finite;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Kaleidoscope.Math.Set
+{
+    public abstract class YRSet : IYRSet
+    {
+        public abstract IValueTask<bool> Contains(IYRSet element);
+        public abstract IValueTask<bool> ZFEquals(IYRSet other);
+
+        public virtual async IValueTask<IYRSet> Pair(IYRSet other)
+        {
+            return await this.ZFEquals(other) 
+                ? await YRSet.CreateSet(new IYRSet[] { this })
+                : await YRSet.CreateSet(new IYRSet[] { this, other });
+        }
+
+        public abstract IValueTask<IYRSet> Union();
+        public abstract IValueTask<IYRSet> Power();
+        public abstract IAsyncEnumerable<IYRSet> Enumerate();
+
+        public static IAxiomaticSystem AxiomaticSystem { get; set;}
+        public static IYREmptySet Empty => AxiomaticSystem.ExistanceAxioms.OfType<IYREmptySet>().FirstOrDefault() ?? new YREmptySet();
+        public static IYRInfiniteSet Infinity => AxiomaticSystem.ExistanceAxioms.OfType<IYRInfiniteSet>().First();
+        public static ValueTask<IYRFiniteSet> CreateSet(IEnumerable<IYRSet> sets) => YRSetFactory.CreateSet(sets);
+
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set\YRSet.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set\YRVonNeumannInfiniteAxiomSet.cs ===
+using Kaleidoscope.Core.Async.Abstractions;
+using Kaleidoscope.Math.Set.Abstractions;
+using Kaleidoscope.Math.Set.Abstractions.Infinite;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Kaleidoscope.Math.Set
+{
+    public struct YRVonNeumannInfiniteAxiomSet : IYRInfiniteSet, IYRAxiomSet
+    {
+        public IValueTask<bool> Contains(IYRSet element)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IAsyncEnumerable<IYRSet> Enumerate()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IValueTask<IYRSet> Pair(IYRSet other)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IValueTask<IYRSet> Power()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IValueTask<IYRSet> Union()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IValueTask<bool> ZFEquals(IYRSet other)
+        {
+            throw new NotImplementedException();
+        }
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.Set\YRVonNeumannInfiniteAxiomSet.cs ===
+Please follow these requirements and instructions when writing code: 
+Try to think about the general Architecture first and what interfaces we need first.
+Use first principal thinking and try to break down the problem into small parts.
+We dont have to solve the problem all at once. We can solve it step by step.
+Styleguide for C# code: 
+Optimal and Minimal Code
+Never use Comments
+Variable names should always be descriptive. Never use abstract symbols or abbreviations for variable names. 
+Never use records or structs, always use Classes
+Only use classes, interfaces and enums
+Each class, no matter how trivial, must origin atleast from one interface that we define (multiple implementations are of course still possible without having to define multiple interfaces).
+Each class, interface and enum goes into each own file.
+Each namespace represents a distinct module and can be thought of having its own C# project / being its own Nuget-Module
+Always think about how to solve the problem by using an OOP approach.
+We never want a class to be too large. Classes should definetly be (except VERY rare exceptions) not more than 200 lines of code and Methods (except VERY rare exceptions) shouldnt have more than 40 lines of code
+ALL interface should always start their name with the Prefix IYR and all classes and Enums should always start their name with the prefix YR
+Use Dependency Injection and FactoryPattern where possible 
+Make all classes and interfaces public for now so we can use them in other libraries
+Try to have everything that makes sense and is some kind of a computation return a ITask or a IValueTask (both special optimized async classes) such that we always have the possibility to use multithreading in the future.
+DONT put 'async' in these methods name, all our methods are basically async.
+Also, you DONT need to use ValueTask<T>.AsIValueTask(), you can just make the method an async IValueTask<T> method and return value of type T directly!

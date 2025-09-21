@@ -1,0 +1,3 @@
+Try to have everything that makes sense and is some kind of a computation return a ITask or a IValueTask (both special optimized async classes) such that we always have the possibility to use multithreading in the future.
+DONT put 'async' in these methods name, all our methods are basically async.
+Also, you DONT need to use ValueTask<T>.AsIValueTask(), you can just make the method an async IValueTask<T> method and return value of type T directly!
