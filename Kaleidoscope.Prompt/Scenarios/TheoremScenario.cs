@@ -23,6 +23,8 @@ namespace Kaleidoscope.Prompt.Scenarios
             ];
             List<string> resources =
             [
+
+                @"Kaleidoscope.Prompt.EmbeddedResources.namingconvention.prompt",
                 @"Kaleidoscope.Prompt.EmbeddedResources.abstractReasoning.prompt",
                 @"Kaleidoscope.Prompt.EmbeddedResources.styleguide.prompt",
                 @"Kaleidoscope.Prompt.EmbeddedResources.multithreaded.prompt",

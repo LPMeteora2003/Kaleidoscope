@@ -55,6 +55,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kaleidoscope.Theorem.Core",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kaleidoscope.Theorem.Core.Abstractions", "Kaleidoscope.Theorem.Core.Abstractions\Kaleidoscope.Theorem.Core.Abstractions.csproj", "{21AF3651-A628-47FE-850E-254A2A590E12}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kaleidoscope.Math.Demo", "Kaleidoscope.Math.Demo\Kaleidoscope.Math.Demo.csproj", "{A7D59A77-99E6-49AB-BF3B-F27D8F333B42}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -141,6 +143,10 @@ Global
 		{21AF3651-A628-47FE-850E-254A2A590E12}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{21AF3651-A628-47FE-850E-254A2A590E12}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{21AF3651-A628-47FE-850E-254A2A590E12}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7D59A77-99E6-49AB-BF3B-F27D8F333B42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7D59A77-99E6-49AB-BF3B-F27D8F333B42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7D59A77-99E6-49AB-BF3B-F27D8F333B42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7D59A77-99E6-49AB-BF3B-F27D8F333B42}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -167,5 +173,6 @@ Global
 		{19DFF2E6-5E6F-4BE5-AEBD-BCFEFA011171} = {98D756EF-1B09-4F22-A858-0AE9B7F14280}
 		{B2F514D7-8DDE-4477-A9CF-55CBF7A7DCF9} = {65DC20BF-CDDD-4C21-8C24-00CC6DA610D2}
 		{21AF3651-A628-47FE-850E-254A2A590E12} = {65DC20BF-CDDD-4C21-8C24-00CC6DA610D2}
+		{A7D59A77-99E6-49AB-BF3B-F27D8F333B42} = {262E7D3C-E464-4982-A8DC-EE45F03B6D47}
 	EndGlobalSection
 EndGlobal

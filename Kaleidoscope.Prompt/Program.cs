@@ -7,8 +7,7 @@ using Kaleidoscope.Prompt.Scenarios;
 using System.Diagnostics;
 
 var outputFilePath = @"C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Prompt\Prompt.txt";
-var tempFilePath = @"C:\Users\Worker\Desktop\Temp\Kaleidoscope";
-var result = await MathScenario.Generate();
+var result = await TheoremScenario.Generate();
 
 Console.WriteLine(result);
 File.WriteAllText(outputFilePath, result);

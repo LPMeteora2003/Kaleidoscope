@@ -1,0 +1,6 @@
+Naming Conventions for classed, interfaces and enums: 
+ALL interface should always start their name with the Prefix I_YR
+All classes should always start their name with the Prefix C_YR
+All enums should always start their name with the Prefix E_YR
+All structs should always start their name with the Prefix S_YR
+All records should always start their name with the Prefix R_YR

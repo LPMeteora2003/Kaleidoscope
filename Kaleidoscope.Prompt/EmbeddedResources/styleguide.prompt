@@ -1,14 +1,17 @@
-Styleguide for C# code: 
+Styleguide for C# (refular business logic .cs files) code: 
 Optimal and Minimal Code
 Never use Comments
 Variable names should always be descriptive. Never use abstract symbols or abbreviations for variable names. 
-Never use records or structs, always use Classes
-Only use classes, interfaces and enums
+
+Only use classes, interfaces for general business logic.
+Use enums for finite Enumerations (like day of the week).
+Use a record when the primary purpose is to carry data.
+Use a struct when objects represents a single, atomic value, has a small memory footprint and will not be "boxed" or "unboxed" frequently.
+
 Each class, no matter how trivial, must origin atleast from one interface that we define (multiple implementations are of course still possible without having to define multiple interfaces).
 Each class, interface and enum goes into each own file.
 Each namespace represents a distinct module and can be thought of having its own C# project / being its own Nuget-Module
 Always think about how to solve the problem by using an OOP approach.
 We never want a class to be too large. Classes should definetly be (except VERY rare exceptions) not more than 200 lines of code and Methods (except VERY rare exceptions) shouldnt have more than 40 lines of code
-ALL interface should always start their name with the Prefix IYR and all classes and Enums should always start their name with the prefix YR
-Use Dependency Injection and FactoryPattern where possible 
 Make all classes and interfaces public for now so we can use them in other libraries
+Always answer with the full Code for any class or method that you change, so it can be copied more easily.
