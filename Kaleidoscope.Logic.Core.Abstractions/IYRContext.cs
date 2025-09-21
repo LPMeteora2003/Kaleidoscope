@@ -11,7 +11,12 @@ namespace Kaleidoscope.Logic.Core.Abstractions
 {
     public interface IYRContext : IYRSingleton
     {
-        IYRContext IYRContext { get; }
+        IYRContext Context { get; }
         IYRStatement Statement { get; }
+    }
+    public interface IYRAnnotatedContext : IYRContext
+    {
+        string Name { get; }
+        string Description { get; }
     }
 }

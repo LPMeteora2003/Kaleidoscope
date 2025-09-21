@@ -8,6 +8,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Kaleidoscope.Core.Abstractions\Kaleidoscope.Core.Abstractions.csproj" />
+    <ProjectReference Include="..\Kaleidoscope.Core.Async\Kaleidoscope.Core.Async.csproj" />
+    <ProjectReference Include="..\Kaleidoscope.Core\Kaleidoscope.Core.csproj" />
+    <ProjectReference Include="..\Kaleidoscope.Logic.Complete.Simple\Kaleidoscope.Logic.Complete.Simple.csproj" />
+    <ProjectReference Include="..\Kaleidoscope.Logic.Core.Abstractions\Kaleidoscope.Logic.Core.Abstractions.csproj" />
+    <ProjectReference Include="..\Kaleidoscope.Logic.Core\Kaleidoscope.Logic.Core.csproj" />
     <ProjectReference Include="..\Kaleidoscope.Math.Core\Kaleidoscope.Math.Core.csproj" />
     <ProjectReference Include="..\Kaleidoscope.Math.Set.Standard.Integers\Kaleidoscope.Math.Set.Standard.Integers.csproj" />
     <ProjectReference Include="..\Kaleidoscope.Math.Set.Standard.Naturals\Kaleidoscope.Math.Set.Standard.Naturals.csproj" />

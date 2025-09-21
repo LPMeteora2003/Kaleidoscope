@@ -10,4 +10,9 @@ namespace Kaleidoscope.Logic.Core.Abstractions.Predicat
     public interface IYRPredicate : IYRSingleton
     {
     }
+    public interface IYRAnnotatedPredicate : IYRPredicate
+    {
+        string Name { get; }
+        string Description { get; }
+    }
 }

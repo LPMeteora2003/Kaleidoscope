@@ -32,7 +32,165 @@ namespace Kaleidoscope.Core
 === START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Demo\Program.cs ===
 Console.WriteLine("Hello World");
 === END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Demo\Program.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Logic.Complete.Simple\Outside\YRPureEqualityExactlyNElementsEvaluator.cs ===
+using Kaleidoscope.Logic.Complete.Simple.PureEqualityExactlyNElements.Statements;
+using Kaleidoscope.Logic.Core.Abstractions.Evaluation;
+using Kaleidoscope.Logic.Core.Abstractions.Statement;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Kaleidoscope.Logic.Complete.Simple.Outside
+{
+    public class YRPureEqualityExactlyNElementsEvaluator : IYRLogicEvaluator
+    {
+        public object Evaluate(IYRStatement statement)
+        {
+            if (statement is Statement1 statement1)
+            {
+                return true;
+            }
+            return default;
+        }
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Logic.Complete.Simple\Outside\YRPureEqualityExactlyNElementsEvaluator.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Logic.Complete.Simple\PureEqualityExactlyNElements\Contexts\YRPureEqualityExactlyNElementsContext.cs ===
+using Kaleidoscope.Core;
+using Kaleidoscope.Logic.Complete.Simple.PureEqualityExactlyNElements.Judgements;
+using Kaleidoscope.Logic.Core.Abstractions;
+using Kaleidoscope.Logic.Core.Abstractions.Statement;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Kaleidoscope.Logic.Complete.Simple.PureEqualityExactlyNElements.Contexts
+{
+    public class YRPureEqualityExactlyNElementsContext : YRSingleton<YRPureEqualityExactlyNElementsContext>, IYRContext
+    {
+        public IYRContext IYRContext => YRPureEqualityExactlyNElementsContext.Instance;
+
+        public IYRStatement Statement => throw new NotImplementedException();
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Logic.Complete.Simple\PureEqualityExactlyNElements\Contexts\YRPureEqualityExactlyNElementsContext.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Logic.Complete.Simple\PureEqualityExactlyNElements\Judgements\YRPureEqualityExactlyNElementsJudgement.cs ===
+using Kaleidoscope.Core;
+using Kaleidoscope.Logic.Complete.Simple.PureEqualityExactlyNElements.Contexts;
+using Kaleidoscope.Logic.Complete.Simple.PureEqualityExactlyNElements.Verdicts;
+using Kaleidoscope.Logic.Core.Abstractions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Kaleidoscope.Logic.Complete.Simple.PureEqualityExactlyNElements.Judgements
+{
+    public class YRPureEqualityExactlyNElementsJudgement : YRSingleton<YRPureEqualityExactlyNElementsJudgement>, IYRJudgement
+    {
+        public IYRJudgement Judgement => YRPureEqualityExactlyNElementsJudgement.Instance;
+
+        public IYRContext Premise => YRPureEqualityExactlyNElementsContext.Instance;
+
+        public IYRContext Conclusion => YRPureEqualityExactlyNElementsContext.Instance;
+
+        public IYRVerdict Verdict => EqualVerdict.Instance;
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Logic.Complete.Simple\PureEqualityExactlyNElements\Judgements\YRPureEqualityExactlyNElementsJudgement.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Logic.Complete.Simple\PureEqualityExactlyNElements\Predicats\EqualityPredicate.cs ===
+using Kaleidoscope.Core;
+using Kaleidoscope.Logic.Complete.Simple.PureEqualityExactlyNElements.Judgements;
+using Kaleidoscope.Logic.Core.Abstractions;
+using Kaleidoscope.Logic.Core.Abstractions.Predicat;
+using Kaleidoscope.Logic.Core.Abstractions.Predicat.FixedArity;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Kaleidoscope.Logic.Complete.Simple.PureEqualityExactlyNElements.Predicats
+{
+    public class EqualityPredicate : YRSingleton<EqualityPredicate>, IYRBinaryPredicate, IYRAnnotatedPredicate
+    {
+        public string Name => "=";
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Logic.Complete.Simple\PureEqualityExactlyNElements\Predicats\EqualityPredicate.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Logic.Complete.Simple\PureEqualityExactlyNElements\Statements\Statement1.cs ===
+using Kaleidoscope.Core;
+using Kaleidoscope.Logic.Complete.Simple.PureEqualityExactlyNElements.Predicats;
+using Kaleidoscope.Logic.Core.Abstractions.Predicat;
+using Kaleidoscope.Logic.Core.Abstractions.Statement;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Kaleidoscope.Logic.Complete.Simple.PureEqualityExactlyNElements.Statements
+{
+    public class Statement1 : YRSingleton<Statement1>, IYRAnnotatedStatement
+    {
+        public string Name => "ExactlyNDistinctElements.";
+
+        public string Description => "There exist exactly n distinct elements.";
+
+        public IYRPredicate ConstructorPredicate => EqualityPredicate.Instance;
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Logic.Complete.Simple\PureEqualityExactlyNElements\Statements\Statement1.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Logic.Complete.Simple\PureEqualityExactlyNElements\Verdicts\EqualVerdict.cs ===
+using Kaleidoscope.Core;
+using Kaleidoscope.Core.Abstractions;
+using Kaleidoscope.Logic.Core.Abstractions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Kaleidoscope.Logic.Complete.Simple.PureEqualityExactlyNElements.Verdicts
+{
+    public class EqualVerdict : YRSingleton<EqualVerdict>, IYRVerdict
+    {
+        public IYRVerdict Verdict => NotEqualVerdict.Instance;
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Logic.Complete.Simple\PureEqualityExactlyNElements\Verdicts\EqualVerdict.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Logic.Complete.Simple\PureEqualityExactlyNElements\Verdicts\NotEqualVerdict.cs ===
+using Kaleidoscope.Core;
+using Kaleidoscope.Logic.Core.Abstractions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Kaleidoscope.Logic.Complete.Simple.PureEqualityExactlyNElements.Verdicts
+{
+    public class NotEqualVerdict : YRSingleton<NotEqualVerdict>, IYRVerdict
+    {
+        public IYRVerdict Verdict => NotEqualVerdict.Instance;
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Logic.Complete.Simple\PureEqualityExactlyNElements\Verdicts\NotEqualVerdict.cs ===
 === START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Logic.Complete.Simple\PureEqualityExactlyNElements\YRPureEqualityExactlyNElementsTheory.cs ===
+using Kaleidoscope.Logic.Complete.Simple.PureEqualityExactlyNElements.Judgements;
+using Kaleidoscope.Logic.Complete.Simple.PureEqualityExactlyNElements.Verdicts;
 using Kaleidoscope.Logic.Core.Abstractions;
 using System;
 using System.Collections.Generic;
@@ -44,9 +202,9 @@ namespace Kaleidoscope.Logic.Complete.Simple.PureEqualityExactlyNElements
 {
     public class YRPureEqualityExactlyNElementsTheory : IYRLogicConstruct
     {
-        public IYRJudgement Judgement => throw new NotImplementedException();
+        public IYRJudgement Judgement => YRPureEqualityExactlyNElementsJudgement.Instance;
 
-        public IYRJudgement IYRVerdict => throw new NotImplementedException();
+        public IYRVerdict IYRVerdict => EqualVerdict.Instance;
     }
 }
 
@@ -106,7 +264,7 @@ namespace Kaleidoscope.Logic.Core.Abstractions
     public interface IYRLogicConstruct : IYRSingleton
     {
         IYRJudgement Judgement { get; }
-        IYRJudgement IYRVerdict { get; }
+        IYRVerdict IYRVerdict { get; }
     }
 }
 
@@ -129,6 +287,25 @@ namespace Kaleidoscope.Logic.Core.Abstractions
 }
 
 === END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Logic.Core.Abstractions\IYRVerdict.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Logic.Core.Abstractions\Outside\IYRLogicEvaluator.cs ===
+using Kaleidoscope.Logic.Core.Abstractions.Statement;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Kaleidoscope.Logic.Core.Abstractions.Evaluation
+{
+    public interface IYRLogicEvaluator
+    {
+        public object Evaluate(IYRStatement statement);
+
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Logic.Core.Abstractions\Outside\IYRLogicEvaluator.cs ===
 === START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Logic.Core.Abstractions\Predicat\FixedArity\IYRBinaryPredicate.cs ===
 using System;
 using System.Collections.Generic;
@@ -189,6 +366,22 @@ namespace Kaleidoscope.Logic.Core.Abstractions.Predicat.FixedArity
 }
 
 === END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Logic.Core.Abstractions\Predicat\FixedArity\IYRUnaryPredicate.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Logic.Core.Abstractions\Predicat\IYRAnnotatedPredicate.cs ===
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Kaleidoscope.Logic.Core.Abstractions.Predicat
+{
+    public interface IYRAnnotatedPredicate : IYRPredicate
+    {
+        public string Name { get; }
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Logic.Core.Abstractions\Predicat\IYRAnnotatedPredicate.cs ===
 === START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Logic.Core.Abstractions\Predicat\IYRNoArityPredicate.cs ===
 using System;
 using System.Collections.Generic;
@@ -235,6 +428,23 @@ namespace Kaleidoscope.Logic.Core.Abstractions.Predicat
 }
 
 === END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Logic.Core.Abstractions\Predicat\IYRVariableArityPredicate.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Logic.Core.Abstractions\Statement\IYRAnnotatedStatement.cs ===
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Kaleidoscope.Logic.Core.Abstractions.Statement
+{
+    public interface IYRAnnotatedStatement : IYRStatement
+    {
+        string Name { get; }
+        string Description { get; }
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Logic.Core.Abstractions\Statement\IYRAnnotatedStatement.cs ===
 === START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Logic.Core.Abstractions\Statement\IYRFixedArityStatement.cs ===
 using Kaleidoscope.Logic.Core.Abstractions.Predicat;
 using Kaleidoscope.Logic.Core.Abstractions.Predicat.FixedArity;
@@ -256,17 +466,12 @@ namespace Kaleidoscope.Logic.Core.Abstractions.Statement
 === START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Logic.Core.Abstractions\Statement\IYRStatement.cs ===
 using Kaleidoscope.Core.Abstractions;
 using Kaleidoscope.Logic.Core.Abstractions.Predicat;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Kaleidoscope.Logic.Core.Abstractions.Statement
 {
     public interface IYRStatement : IYRSingleton
     {
-        IYRPredicate Predicate { get; }
+        IYRPredicate ConstructorPredicate { get; }
     }
 }
 

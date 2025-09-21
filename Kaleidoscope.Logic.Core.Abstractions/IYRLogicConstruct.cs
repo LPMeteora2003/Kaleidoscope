@@ -10,6 +10,6 @@ namespace Kaleidoscope.Logic.Core.Abstractions
     public interface IYRLogicConstruct : IYRSingleton
     {
         IYRJudgement Judgement { get; }
-        IYRContext IYRVerdict { get; }
+        IYRVerdict Verdict { get; }
     }
 }

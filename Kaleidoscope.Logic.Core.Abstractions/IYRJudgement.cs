@@ -13,7 +13,6 @@ namespace Kaleidoscope.Logic.Core.Abstractions
     {
         IYRJudgement Judgement { get; }
         IYRContext Premise { get; }
-        IYRContext Conclusion {  get; }
         IYRVerdict Verdict { get; }
     }
 }

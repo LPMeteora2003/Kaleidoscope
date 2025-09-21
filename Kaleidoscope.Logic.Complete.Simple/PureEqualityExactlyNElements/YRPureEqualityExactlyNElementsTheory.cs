@@ -1,4 +1,7 @@
-﻿using Kaleidoscope.Logic.Core.Abstractions;
+﻿using Kaleidoscope.Core;
+using Kaleidoscope.Logic.Complete.Simple.PureEqualityExactlyNElements.Judgements;
+using Kaleidoscope.Logic.Complete.Simple.PureEqualityExactlyNElements.Verdicts;
+using Kaleidoscope.Logic.Core.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,10 +10,10 @@ using System.Threading.Tasks;
 
 namespace Kaleidoscope.Logic.Complete.Simple.PureEqualityExactlyNElements
 {
-    public class YRPureEqualityExactlyNElementsTheory : IYRLogicConstruct
+    public class YRPureEqualityExactlyNElementsTheory : YRSingleton<YRPureEqualityExactlyNElementsTheory>, IYRLogicConstruct
     {
-        public IYRContext Judgement => throw new NotImplementedException();
+        public IYRJudgement Judgement => YRPureEqualityExactlyNElementsJudgement.Instance;
 
-        public IYRContext IYRVerdict => throw new NotImplementedException();
+        public IYRVerdict Verdict => EqualVerdict.Instance;
     }
 }
