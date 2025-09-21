@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Kaleidoscope.Logic.Core.Abstractions
+namespace Kaleidoscope.Logic.Core.Abstractions.Predicat.FixedArity
 {
-    public interface IYRFormalLogic : IYRLogic
+    public interface IYRNullaryPredicate : IYRFixedArityPredicate
     {
     }
 }

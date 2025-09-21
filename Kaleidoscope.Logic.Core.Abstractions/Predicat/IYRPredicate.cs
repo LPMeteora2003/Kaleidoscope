@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Kaleidoscope.Logic.Core.Abstractions
+namespace Kaleidoscope.Logic.Core.Abstractions.Predicat
 {
-    public interface IYRLogic
+    public interface IYRPredicate : IYRSingleton
     {
     }
 }

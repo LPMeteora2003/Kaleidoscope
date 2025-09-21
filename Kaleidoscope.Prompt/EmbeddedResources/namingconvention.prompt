@@ -6,4 +6,5 @@ All structs should always start their name with the Prefix YR
 All records should always start their name with the Prefix YR
 
 The values of enums should always be in ALL-CAPS (but not the name of the enum itself, that is still PascalCase)
-every enum should also always, in addition to its other values contain the value NULL = 0 (representing an invalid value and meaning it hasnt been initalized correctly), that helps later in debugging as you can see if an Enum has been initialized even
+every enum should also always, in addition to its other values contain the value NULL = 0 (representing an invalid value and meaning it hasnt been initalized correctly), that helps later in debugging as you can see if an Enum has been initialized even.
+In the case, where if we have a value like NONE for our enum, then even that value becomes the first enum value (NONE = 1) (so NULL doesnt mean, like no value, but is a completely seperate value)
