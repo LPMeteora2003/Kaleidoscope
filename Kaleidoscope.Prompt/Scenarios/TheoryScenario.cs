@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Kaleidoscope.Prompt.Scenarios
 {
-    public static class TheoremScenario
+    public static class TheoryScenario
     {
         public static async Task<string> Generate()
         {
@@ -18,7 +18,6 @@ namespace Kaleidoscope.Prompt.Scenarios
             [
                 @"C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Math.*",
                 @"C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Prompt",
-                @"C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Core.Async.Abstractions",
                 @"C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Core.Async.MorseCode",
             ];
             List<string> resources =

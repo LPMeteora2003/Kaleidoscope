@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Kaleidoscope.Theorem.Core
+namespace Kaleidoscope.Logic.Core.Abstractions
 {
-    public class C_YRTheorem : I_YRTheorem
+    public interface IYRStatement
     {
     }
 }

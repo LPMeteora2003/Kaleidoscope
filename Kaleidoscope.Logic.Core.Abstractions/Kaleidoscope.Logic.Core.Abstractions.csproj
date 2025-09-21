@@ -7,7 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Kaleidoscope.Theorem.Core.Abstractions\Kaleidoscope.Theorem.Core.Abstractions.csproj" />
+    <ProjectReference Include="..\Kaleidoscope.Core.Abstractions\Kaleidoscope.Core.Abstractions.csproj" />
+    <ProjectReference Include="..\Kaleidoscope.Core.Async.Abstractions\Kaleidoscope.Core.Async.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

@@ -3,10 +3,12 @@ Optimal and Minimal Code
 Never use Comments
 Variable names should always be descriptive. Never use abstract symbols or abbreviations for variable names. 
 
-Only use classes, interfaces for general business logic.
+Generally use classes, interfaces for general business logic.
 Use enums for finite Enumerations (like day of the week).
 Use a record when the primary purpose is to carry data.
 Use a struct when objects represents a single, atomic value, has a small memory footprint and will not be "boxed" or "unboxed" frequently.
+
+
 
 Each class, no matter how trivial, must origin atleast from one interface that we define (multiple implementations are of course still possible without having to define multiple interfaces).
 Each class, interface and enum goes into each own file.

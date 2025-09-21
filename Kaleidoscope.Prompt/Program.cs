@@ -7,7 +7,7 @@ using Kaleidoscope.Prompt.Scenarios;
 using System.Diagnostics;
 
 var outputFilePath = @"C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Prompt\Prompt.txt";
-var result = await PromptInstructionsScenario.Generate();
+var result = await TheoryScenario.Generate();
 
 Console.WriteLine(result);
 File.WriteAllText(outputFilePath, result);

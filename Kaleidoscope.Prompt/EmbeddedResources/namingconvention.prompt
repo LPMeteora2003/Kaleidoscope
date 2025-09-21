@@ -1,6 +1,9 @@
 Naming Conventions for classed, interfaces and enums: 
-ALL interface should always start their name with the Prefix I_YR
-All classes should always start their name with the Prefix C_YR
-All enums should always start their name with the Prefix E_YR
-All structs should always start their name with the Prefix S_YR
-All records should always start their name with the Prefix R_YR
+ALL interface should always start their name with the Prefix IYR
+All classes should always start their name with the Prefix YR
+All enums should always start their name with the Prefix YR
+All structs should always start their name with the Prefix YR
+All records should always start their name with the Prefix YR
+
+The values of enums should always be in ALL-CAPS (but not the name of the enum itself, that is still PascalCase)
+every enum should also always, in addition to its other values contain the value NULL = 0 (representing an invalid value and meaning it hasnt been initalized correctly), that helps later in debugging as you can see if an Enum has been initialized even

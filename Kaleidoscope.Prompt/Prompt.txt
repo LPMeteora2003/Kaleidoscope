@@ -1,11 +1,415 @@
 Have a look at my current code: 
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Core.Abstractions\IYRSingleton.cs ===
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Kaleidoscope.Core.Abstractions
+{
+    public interface IYRSingleton
+    {
+    }
+
+    public interface IYRSingleton<T> where T : IYRSingleton<T>
+    {
+        abstract static T Instance { get; }
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Core.Abstractions\IYRSingleton.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Core.Async.Abstractions\IValueTask.cs ===
+using Kaleidoscope.Core.Async.Abstractions.YRValueTask;
+using Kaleidoscope.Core.Async.MorseCode;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Kaleidoscope.Core.Async.Abstractions
+{
+    [AsyncMethodBuilder(typeof(ValueTaskInterfaceAsyncMethodBuilder))]
+    public interface IValueTask
+    {
+        IAwaiter GetAwaiter();
+        IConfiguredTask ConfigureAwait(bool continueOnCapturedContext);        
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Core.Async.Abstractions\IValueTask.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Core.Async.Abstractions\IValueTask[TResult].cs ===
+using Kaleidoscope.Core.Async.Abstractions.YRValueTask;
+using Kaleidoscope.Core.Async.MorseCode;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Kaleidoscope.Core.Async.Abstractions
+{
+    [AsyncMethodBuilder(typeof(ValueTaskInterfaceAsyncMethodBuilder<>))]
+    public interface IValueTask<out TResult> : IValueTask
+    {
+        new IAwaiter<TResult> GetAwaiter();
+        new IConfiguredTask<TResult> ConfigureAwait(bool continueOnCapturedContext);
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Core.Async.Abstractions\IValueTask[TResult].cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Core.Async.Abstractions\ValueTaskObjects\ValueTaskAwaiterToAwaiterAdapter.cs ===
+using Kaleidoscope.Core.Async.MorseCode;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Kaleidoscope.Core.Async.Abstractions.YRValueTask
+{
+    internal class ValueTaskAwaiterToAwaiterAdapter<TResult> : IAwaiter
+    {
+        private readonly ValueTaskAwaiter<TResult> awaiter;
+
+        public ValueTaskAwaiterToAwaiterAdapter(ValueTaskAwaiter<TResult> awaiter)
+        {
+            this.awaiter = awaiter;
+        }
+
+        bool IAwaiter.IsCompleted => this.awaiter.IsCompleted;
+
+        void INotifyCompletion.OnCompleted(Action continuation) => this.awaiter.OnCompleted(continuation);
+
+        void ICriticalNotifyCompletion.UnsafeOnCompleted(Action continuation) => this.awaiter.UnsafeOnCompleted(continuation);
+
+        void IAwaiter.GetResult() => this.awaiter.GetResult();
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Core.Async.Abstractions\ValueTaskObjects\ValueTaskAwaiterToAwaiterAdapter.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Core.Async.Abstractions\ValueTaskObjects\ValueTaskAwaiterWrapper.cs ===
+using Kaleidoscope.Core.Async.MorseCode;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Kaleidoscope.Core.Async.Abstractions.YRValueTask
+{
+    public class ValueTaskAwaiterWrapper : ICriticalNotifyCompletion, IAwaiter
+    {
+        private ValueTaskAwaiter awaiter;
+        public ValueTaskAwaiterWrapper(ValueTaskAwaiter awaiter) => this.awaiter = awaiter;
+        bool IAwaiter.IsCompleted => awaiter.IsCompleted;
+        void INotifyCompletion.OnCompleted(Action continuation) => awaiter.OnCompleted(continuation);
+        void ICriticalNotifyCompletion.UnsafeOnCompleted(Action continuation) => awaiter.UnsafeOnCompleted(continuation);
+        void IAwaiter.GetResult() => awaiter.GetResult();
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Core.Async.Abstractions\ValueTaskObjects\ValueTaskAwaiterWrapper.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Core.Async.Abstractions\ValueTaskObjects\ValueTaskAwaiterWrapper[TResult].cs ===
+using System;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
+using Kaleidoscope.Core.Async.MorseCode;
+
+namespace Kaleidoscope.Core.Async.Abstractions.YRValueTask
+{
+    internal class ValueTaskAwaiterWrapper<TResult> : IAwaiter<TResult>
+    {
+        private ValueTaskAwaiter<TResult> awaiter;
+
+        public ValueTaskAwaiterWrapper(ValueTaskAwaiter<TResult> awaiter)
+        {
+            this.awaiter = awaiter;
+        }
+
+        bool IAwaiter<TResult>.IsCompleted
+        {
+            get
+            {
+                return this.awaiter.IsCompleted;
+            }
+        }
+
+        void INotifyCompletion.OnCompleted(Action continuation)
+        {
+            this.awaiter.OnCompleted(continuation);
+        }
+
+        void ICriticalNotifyCompletion.UnsafeOnCompleted(Action continuation)
+        {
+            this.awaiter.UnsafeOnCompleted(continuation);
+        }
+
+        TResult IAwaiter<TResult>.GetResult()
+        {
+            return this.awaiter.GetResult();
+        }
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Core.Async.Abstractions\ValueTaskObjects\ValueTaskAwaiterWrapper[TResult].cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Core.Async.Abstractions\ValueTaskObjects\ValueTaskExtensionMethods.cs ===
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Kaleidoscope.Core.Async.Abstractions.YRValueTask
+{
+    public static class ValueTaskExtensionMethods
+    {
+        public static IValueTask AsIValueTask(this ValueTask valueTask) => new ValueTaskWrapper(valueTask);
+        public static IValueTask AsIValueTask(this Task task) => new ValueTaskWrapper(new ValueTask(task));
+        public static IValueTask<TResult> AsIValueTask<TResult>(this ValueTask<TResult> valueTask) => new ValueTaskWrapper<TResult>(valueTask);
+        public static IValueTask<TResult> AsIValueTask<TResult>(this Task<TResult> task) => new ValueTaskWrapper<TResult>(new ValueTask<TResult>(task));
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Core.Async.Abstractions\ValueTaskObjects\ValueTaskExtensionMethods.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Core.Async.Abstractions\ValueTaskObjects\ValueTaskInterfaceAsyncMethodBuilder.cs ===
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Kaleidoscope.Core.Async.Abstractions.YRValueTask
+{
+    [StructLayout(LayoutKind.Auto)]
+    public struct ValueTaskInterfaceAsyncMethodBuilder
+    {
+        private AsyncTaskMethodBuilder builder;
+        public IValueTask Task => builder.Task.AsIValueTask();
+        ValueTaskInterfaceAsyncMethodBuilder(AsyncTaskMethodBuilder builder) => this.builder = builder;
+        public static ValueTaskInterfaceAsyncMethodBuilder Create() => new ValueTaskInterfaceAsyncMethodBuilder(AsyncTaskMethodBuilder.Create());
+        public void SetException(Exception exception) => builder.SetException(exception);
+        public void SetResult() => builder.SetResult();
+        public void SetStateMachine(IAsyncStateMachine stateMachine) => builder.SetStateMachine(stateMachine);
+        public void Start<TStateMachine>(ref TStateMachine stateMachine) where TStateMachine : IAsyncStateMachine => builder.Start(ref stateMachine);
+        public void AwaitOnCompleted<TAwaiter, TStateMachine>(ref TAwaiter awaiter, ref TStateMachine stateMachine)
+            where TAwaiter : INotifyCompletion
+            where TStateMachine : IAsyncStateMachine => builder.AwaitOnCompleted(ref awaiter, ref stateMachine);
+        public void AwaitUnsafeOnCompleted<TAwaiter, TStateMachine>(ref TAwaiter awaiter, ref TStateMachine stateMachine)
+            where TAwaiter : ICriticalNotifyCompletion
+            where TStateMachine : IAsyncStateMachine => builder.AwaitUnsafeOnCompleted(ref awaiter, ref stateMachine);
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Core.Async.Abstractions\ValueTaskObjects\ValueTaskInterfaceAsyncMethodBuilder.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Core.Async.Abstractions\ValueTaskObjects\ValueTaskInterfaceAsyncMethodBuilder[TResult].cs ===
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Kaleidoscope.Core.Async.Abstractions.YRValueTask
+{
+    [StructLayout(LayoutKind.Auto)]
+    public struct ValueTaskInterfaceAsyncMethodBuilder<TResult>
+    {
+        private AsyncTaskMethodBuilder<TResult> builder;
+        public IValueTask<TResult> Task => builder.Task.AsIValueTask();
+        ValueTaskInterfaceAsyncMethodBuilder(AsyncTaskMethodBuilder<TResult> builder) => this.builder = builder;
+        public static ValueTaskInterfaceAsyncMethodBuilder<TResult> Create() => new ValueTaskInterfaceAsyncMethodBuilder<TResult>(AsyncTaskMethodBuilder<TResult>.Create());
+        public void SetException(Exception exception) => builder.SetException(exception);
+        public void SetResult(TResult result) => builder.SetResult(result);
+        public void SetStateMachine(IAsyncStateMachine stateMachine) => builder.SetStateMachine(stateMachine);
+        public void Start<TStateMachine>(ref TStateMachine stateMachine) where TStateMachine : IAsyncStateMachine => builder.Start(ref stateMachine);
+        public void AwaitOnCompleted<TAwaiter, TStateMachine>(ref TAwaiter awaiter, ref TStateMachine stateMachine)
+            where TAwaiter : INotifyCompletion
+            where TStateMachine : IAsyncStateMachine => builder.AwaitOnCompleted(ref awaiter, ref stateMachine);
+        public void AwaitUnsafeOnCompleted<TAwaiter, TStateMachine>(ref TAwaiter awaiter, ref TStateMachine stateMachine)
+            where TAwaiter : ICriticalNotifyCompletion
+            where TStateMachine : IAsyncStateMachine => builder.AwaitUnsafeOnCompleted(ref awaiter, ref stateMachine);
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Core.Async.Abstractions\ValueTaskObjects\ValueTaskInterfaceAsyncMethodBuilder[TResult].cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Core.Async.Abstractions\ValueTaskObjects\ValueTaskWrapper.cs ===
+using Kaleidoscope.Core.Async.MorseCode;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Kaleidoscope.Core.Async.Abstractions.YRValueTask
+{
+    internal class ValueTaskWrapper : IValueTask
+    {
+        private readonly ValueTask valueTask;
+
+        public ValueTaskWrapper(ValueTask valueTask)
+        {
+            this.valueTask = valueTask;
+        }
+
+        IAwaiter IValueTask.GetAwaiter()
+        {
+            return new ValueTaskAwaiterWrapper(this.valueTask.GetAwaiter());
+        }
+
+        IConfiguredTask IValueTask.ConfigureAwait(bool continueOnCapturedContext)
+        {
+            return new ConfiguredTaskWrapper(this.valueTask.AsTask(), continueOnCapturedContext);
+        }
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Core.Async.Abstractions\ValueTaskObjects\ValueTaskWrapper.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Core.Async.Abstractions\ValueTaskObjects\ValueTaskWrapper[TResult].cs ===
+using Kaleidoscope.Core.Async.MorseCode;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Kaleidoscope.Core.Async.Abstractions.YRValueTask
+{
+    internal class ValueTaskWrapper<TResult> : IValueTask<TResult>
+    {
+        private readonly ValueTask<TResult> valueTask;
+
+        public ValueTaskWrapper(ValueTask<TResult> valueTask) => this.valueTask = valueTask;
+
+        IAwaiter IValueTask.GetAwaiter() => new ValueTaskAwaiterToAwaiterAdapter<TResult>(this.valueTask.GetAwaiter());
+
+        IAwaiter<TResult> IValueTask<TResult>.GetAwaiter() => new ValueTaskAwaiterWrapper<TResult>(this.valueTask.GetAwaiter());
+
+        IConfiguredTask IValueTask.ConfigureAwait(bool continueOnCapturedContext) => new ConfiguredTaskWrapper(this.valueTask.AsTask(), continueOnCapturedContext);
+
+        IConfiguredTask<TResult> IValueTask<TResult>.ConfigureAwait(bool continueOnCapturedContext) => new ConfiguredTaskWrapper<TResult>(this.valueTask.AsTask(), continueOnCapturedContext);
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Core.Async.Abstractions\ValueTaskObjects\ValueTaskWrapper[TResult].cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Core\YRSingleton.cs ===
+using Kaleidoscope.Core.Abstractions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Kaleidoscope.Core
+{
+    public class YRSingleton<T> : IYRSingleton<T> where T : YRSingleton<T>
+    {
+        private static readonly Lazy<T> _instance = new(Create);
+
+        public static T Instance => _instance.Value;
+
+        protected YRSingleton() { }
+
+        private static T Create()
+        {
+            var type = typeof(T);
+            var created = Activator.CreateInstance(type, nonPublic: true);
+            if (created is not T instance)
+                throw new InvalidOperationException($"{type.FullName} must have a non-public parameterless constructor.");
+            return instance;
+        }
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Core\YRSingleton.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Demo\Program.cs ===
+Console.WriteLine("Hello World");
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Demo\Program.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Logic.Core.Abstractions\IYRConsequence.cs ===
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Kaleidoscope.Logic.Core.Abstractions
+{
+    public interface IYRConsequence
+    {
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Logic.Core.Abstractions\IYRConsequence.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Logic.Core.Abstractions\IYRFormalLogic.cs ===
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Kaleidoscope.Logic.Core.Abstractions
+{
+    public interface IYRFormalLogic : IYRLogic
+    {
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Logic.Core.Abstractions\IYRFormalLogic.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Logic.Core.Abstractions\IYRLogic.cs ===
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Kaleidoscope.Logic.Core.Abstractions
+{
+    public interface IYRLogic
+    {
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Logic.Core.Abstractions\IYRLogic.cs ===
+=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Logic.Core.Abstractions\IYRStatement.cs ===
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Kaleidoscope.Logic.Core.Abstractions
+{
+    public interface IYRStatement
+    {
+    }
+}
+
+=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Logic.Core.Abstractions\IYRStatement.cs ===
 Please follow these requirements and instructions when writing code: 
+Naming Conventions for classed, interfaces and enums: 
+ALL interface should always start their name with the Prefix IYR
+All classes should always start their name with the Prefix YR
+All enums should always start their name with the Prefix YR
+All structs should always start their name with the Prefix YR
+All records should always start their name with the Prefix YR
+
+Try to think about the general Architecture first and what interfaces we need first.
+Use first principal thinking and try to break down the problem into small parts.
+We dont have to solve the problem all at once. We can solve it step by step.
 Styleguide for C# (refular business logic .cs files) code: 
 Optimal and Minimal Code
 Never use Comments
 Variable names should always be descriptive. Never use abstract symbols or abbreviations for variable names. 
 
-Only use classes, interfaces for general business logic.
+Generally use classes, interfaces for general business logic.
 Use enums for finite Enumerations (like day of the week).
 Use a record when the primary purpose is to carry data.
 Use a struct when objects represents a single, atomic value, has a small memory footprint and will not be "boxed" or "unboxed" frequently.
@@ -17,16 +421,6 @@ Always think about how to solve the problem by using an OOP approach.
 We never want a class to be too large. Classes should definetly be (except VERY rare exceptions) not more than 200 lines of code and Methods (except VERY rare exceptions) shouldnt have more than 40 lines of code
 Make all classes and interfaces public for now so we can use them in other libraries
 Always answer with the full Code for any class or method that you change, so it can be copied more easily.
-Naming Conventions for classed, interfaces and enums: 
-ALL interface should always start their name with the Prefix I_YR
-All classes should always start their name with the Prefix C_YR
-All enums should always start their name with the Prefix E_YR
-All structs should always start their name with the Prefix S_YR
-All records should always start their name with the Prefix R_YR
-
-Try to think about the general Architecture first and what interfaces we need first.
-Use first principal thinking and try to break down the problem into small parts.
-We dont have to solve the problem all at once. We can solve it step by step.
 Try to have everything that makes sense and is some kind of a computation return a ITask or a IValueTask (both special optimized async classes) such that we always have the possibility to use multithreading in the future.
 DONT put 'async' in these methods name, all our methods are basically async.
 Also, you DONT need to use ValueTask<T>.AsIValueTask(), you can just make the method an async IValueTask<T> method and return value of type T directly!
