@@ -1,18 +1,5 @@
 Have a look at my current code: 
-=== START FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Demo\Program.cs ===
-Console.WriteLine("Hello World");
-=== END FILE: C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Demo\Program.cs ===
 Please follow these requirements and instructions when writing code: 
-Naming Conventions for classed, interfaces and enums: 
-ALL interface should always start their name with the Prefix I_YR
-All classes should always start their name with the Prefix C_YR
-All enums should always start their name with the Prefix E_YR
-All structs should always start their name with the Prefix S_YR
-All records should always start their name with the Prefix R_YR
-
-Try to think about the general Architecture first and what interfaces we need first.
-Use first principal thinking and try to break down the problem into small parts.
-We dont have to solve the problem all at once. We can solve it step by step.
 Styleguide for C# (refular business logic .cs files) code: 
 Optimal and Minimal Code
 Never use Comments
@@ -30,6 +17,16 @@ Always think about how to solve the problem by using an OOP approach.
 We never want a class to be too large. Classes should definetly be (except VERY rare exceptions) not more than 200 lines of code and Methods (except VERY rare exceptions) shouldnt have more than 40 lines of code
 Make all classes and interfaces public for now so we can use them in other libraries
 Always answer with the full Code for any class or method that you change, so it can be copied more easily.
+Naming Conventions for classed, interfaces and enums: 
+ALL interface should always start their name with the Prefix I_YR
+All classes should always start their name with the Prefix C_YR
+All enums should always start their name with the Prefix E_YR
+All structs should always start their name with the Prefix S_YR
+All records should always start their name with the Prefix R_YR
+
+Try to think about the general Architecture first and what interfaces we need first.
+Use first principal thinking and try to break down the problem into small parts.
+We dont have to solve the problem all at once. We can solve it step by step.
 Try to have everything that makes sense and is some kind of a computation return a ITask or a IValueTask (both special optimized async classes) such that we always have the possibility to use multithreading in the future.
 DONT put 'async' in these methods name, all our methods are basically async.
 Also, you DONT need to use ValueTask<T>.AsIValueTask(), you can just make the method an async IValueTask<T> method and return value of type T directly!

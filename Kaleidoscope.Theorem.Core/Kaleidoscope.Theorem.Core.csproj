@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Kaleidoscope.Theorem.Core.Abstractions\Kaleidoscope.Theorem.Core.Abstractions.csproj" />
+  </ItemGroup>
+
 </Project>

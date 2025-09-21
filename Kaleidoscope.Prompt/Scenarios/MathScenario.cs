@@ -17,7 +17,6 @@ namespace Kaleidoscope.Prompt.Scenarios
             List<string> exceptions =
             [
                 @"C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Prompt",
-                @"C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Core.Async.Abstractions",
                 @"C:\Users\Worker\source\repos\Kaleidoscope\Kaleidoscope.Core.Async.MorseCode",
             ];
             List<string> resources =
